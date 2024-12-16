@@ -7,7 +7,6 @@ ASSIGN: =
 -: -
 *: \*
 /: /
-%: %
 POW: \^
 !=: !=
 ==: ==
@@ -15,8 +14,8 @@ POW: \^
 <: <
 >=: >=
 <=: <=
-(: LPAREN
-): RPAREN
-[: LBRACKET
-]: RBRACKET
+LPAREN: \(
+RPAREN: \)
+LBRACKET: \[
+RBRACKET: \]
 WHITESPACE: \s+

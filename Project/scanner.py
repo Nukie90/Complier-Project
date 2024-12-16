@@ -1,5 +1,4 @@
 import re
-from token_lexeme import token_list
 
 class Lexeme:
     def __init__(self, token, lexeme):
@@ -7,7 +6,7 @@ class Lexeme:
         self.lexeme = lexeme
 
     def __str__(self):
-        return f"({self.token}, {self.lexeme})"
+        return f"{self.lexeme}/{self.token}"
 
     def __repr__(self):
         return str(self)
@@ -17,31 +16,86 @@ class Scanner:
         self.text = text
         self.pos = 0
         self.tokens = []
-        self.lexeme = ""
+        self.token_list = {
+            "list": r"list",
+            "REAL": r"[0-9]+\.[0-9]+([eE][+-]?[0-9]+)?",
+            "INT": r"[0-9]+",
+            "VAR": r"[a-zA-Z_][a-zA-Z0-9_]*",
+            "ASSIGN": r"=",
+            "+": r"\+",
+            "-": r"-",
+            "*": r"\*",
+            "/": r"/",
+            "POW": r"\^",
+            "!=": r"!=",
+            "==": r"==",
+            ">": r">",
+            "<": r"<",
+            ">=": r">=",
+            "<=": r"<=",
+            "LPAREN": r"\(",
+            "RPAREN": r"\)",
+            "LBRACKET": r"\[",
+            "RBRACKET": r"\]",
+            "WHITESPACE": r"\s+",
+        }
         
     def scan(self):
+        self.tokens = []
         while self.pos < len(self.text):
-            for token, lexeme in token_list.items():
-                match = re.match(lexeme, self.text[self.pos:])
+            # Skip whitespace
+            whitespace_match = re.match(self.token_list["WHITESPACE"], self.text[self.pos:])
+            if whitespace_match:
+                self.pos += len(whitespace_match.group(0))
+                continue
+            
+            # Try to match tokens
+            matched = False
+            for token, pattern in self.token_list.items():
+                if token == "WHITESPACE":
+                    continue
+                
+                match = re.match(pattern, self.text[self.pos:])
                 if match:
-                    self.lexeme = match.group(0)
-                    self.tokens.append(Lexeme(token, self.lexeme))
-                    self.pos += len(self.lexeme)
+                    lexeme = match.group(0)
+                    self.tokens.append(Lexeme(token, lexeme))
+                    self.pos += len(lexeme)
+                    matched = True
                     break
-            else:
-                raise ValueError(f"Invalid character found: {self.text[self.pos]}")
+            
+            # Handle unrecognized characters
+            if not matched:
+                # Instead of raising an error, create an ERR token
+                self.tokens.append(Lexeme("ERR", self.text[self.pos]))
+                self.pos += 1
+        
         return self.tokens
     
     def __str__(self):
-        return str(self.tokens)
+        return " ".join(str(token) for token in self.tokens)
     
     def __repr__(self):
         return str(self)
     
+def process_file():
+    with open("input.txt", "r") as f:
+        lines = f.readlines()
     
-#Lexical grammar file
-with open("output.lex", "w") as lexfile:
-    for token_name, regex in token_list.items():
-        lexfile.write(f"{token_name}: {regex}\n")
-    
+    with open("output.tok", "w") as f:
+        for line in lines:
+            scanner = Scanner(line)
+            tokens = scanner.scan()
+            f.write(str(scanner) + "\n")
+            print(tokens)
+            
+    #grammar
+    with open("output.lex", "w") as f:
+        for value, regex in scanner.token_list.items():
+            f.write(f"{value}: {regex}\n")
+            
+if __name__ == "__main__":
+    process_file()
+    print("Tokenized output written to output.tok")
+            
+
     
