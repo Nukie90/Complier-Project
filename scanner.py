@@ -2,6 +2,7 @@ import re
 
 # Define token types with their regex patterns
 TOKEN_SPEC = [
+    ("WHITESPACE", r"\s+"),  # Spaces, tabs, and other whitespace
     ("INT", r"\b[0-9]+\b"),  # Integer
     ("REAL", r"\b[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?\b"),  # Real number
     ("VAR", r"\b[a-zA-Z][a-zA-Z0-9_]*\b"),  # Variable
@@ -10,12 +11,12 @@ TOKEN_SPEC = [
     ("ADD", r"\+"),  # Addition
     ("SUB", r"-"),  # Subtraction
     ("MUL", r"\*"),  # Multiplication
-    ("DIV", r"/"),  # Division
     ("IDIV", r"//"),  # Integer division
-    ("GT", r">"),  # Greater than
+    ("DIV", r"/"),  # Division
     ("GTE", r">="),  # Greater than or equal to
-    ("LT", r"<"),  # Less than
+    ("GT", r">"),  # Greater than
     ("LTE", r"<="),  # Less than or equal to
+    ("LT", r"<"),  # Less than
     ("EQ", r"=="),  # Equal to
     ("NEQ", r"!="),  # Not equal to
     ("ASSIGN", r"="),  # Assignment
@@ -35,10 +36,22 @@ def tokenize(line):
     Tokenize a single line of input and return tokens as a formatted string.
     """
     tokens = []
-    for match in token_re.finditer(line):
+    pos = 0  # Track position in the string
+    while pos < len(line):
+        match = token_re.match(line, pos)
+        if not match:
+            pos += 1  # Skip invalid characters
+            continue
         token_type = match.lastgroup
         value = match.group()
+
+        # Skip whitespace tokens
+        if token_type == "WHITESPACE":
+            pos = match.end()
+            continue
+
         tokens.append(f"{value}/{token_type}")
+        pos = match.end()
     return " ".join(tokens)
 
 def process_file(input_file, output_file):
