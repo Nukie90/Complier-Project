@@ -40,7 +40,7 @@ class Scanner:
     
     
 #Lexical grammar file
-with open("Mango1234.lex", "w") as lexfile:
+with open("output.lex", "w") as lexfile:
     for token_name, regex in token_list.items():
         lexfile.write(f"{token_name}: {regex}\n")
     
