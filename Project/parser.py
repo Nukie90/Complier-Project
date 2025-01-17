@@ -174,7 +174,7 @@ def process_input(input_text, line_num):
 
 def process_input_files():
     # Process input file and write output
-    with open("input.txt", "r") as infile, open("bracket.bracket", "w") as outfile:
+    with open("input.txt", "r") as infile, open("ChocolateLava.bracket", "w") as outfile:
         line_num = 1
         lines = infile.readlines()
         
@@ -185,7 +185,7 @@ def process_input_files():
                 outfile.write(f"{result}\n")
     
     # Write symbol table to CSV
-    with open("symbol_table.csv", "w", newline="") as csvfile:
+    with open("ChocolateLava.csv", "w", newline="") as csvfile:
         writer = csv.DictWriter(csvfile, 
                               fieldnames=["lexeme", "line_number", "start_pos", "length", "type", "value"])
         writer.writeheader()
@@ -193,7 +193,7 @@ def process_input_files():
             writer.writerow(entry)
             
 def tokenize_input():
-    with open("input.txt", "r") as infile, open("output.tok", "w") as outfile:
+    with open("input.txt", "r") as infile, open("ChocolateLava.tok", "w") as outfile:
         for line_num, line in enumerate(infile, 1):
             line = line.strip()
             if line:
@@ -205,7 +205,40 @@ def tokenize_input():
                     outfile.write(" ".join(tokens) + "\n")
                 except Exception as e:
                     outfile.write(f"{line}/ERR\n")
-
+                    
+def write_lexical_grammar():
+    lexical_rules = [
+        "REAL (0-9)*\\.(0-9)*",
+        "INT (0-9)*",
+        "DIV_ASSIGN /=",
+        "ASSIGN =",
+        "ADD \\+",
+        "SUB -",
+        "MUL \\*",
+        "DIV /",
+        "IDIV //",
+        "POW \\^",
+        "LT <",
+        "LE <=",
+        "GT >",
+        "GE >=",
+        "EQ ==",
+        "NE !=",
+        "LPAREN \\(",
+        "RPAREN \\)",
+        "LBRACKET \\[",
+        "RBRACKET \\]",
+        "VAR [a-zA-Z][a-zA-Z0-9_]*",
+        "LIST list",
+        "WHITESPACE [ \\t]+",
+        "NEWLINE \\n+",
+        "ERROR [^\\s\\w\\.\\+\\-\\*/=<>!()\\[\\]^]"
+    ]
+    
+    with open("ChocolateLava.lex", "w") as outfile:
+        for rule in lexical_rules:
+            outfile.write(f"{rule}\n")
+            
 def write_grammar():
     grammar_rules = [
     "<program> ::= <statement> | <expression> | <statement> <program> | <expression> <program>",
@@ -227,13 +260,14 @@ def write_grammar():
     "<expression> ::= <VAR> <DIV_ASSIGN> <expression>",
     ]
     
-    with open("grammar.grammar", "w") as outfile:
+    with open("ChocolateLava.grammar", "w") as outfile:
         for rule in grammar_rules:
             outfile.write(f"{rule}\n")
 
 def main():
     process_input_files()
     tokenize_input()
+    write_lexical_grammar()
     write_grammar()
 
 if __name__ == "__main__":
