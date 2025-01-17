@@ -1,9 +1,11 @@
 import re
 
 class Lexeme:
-    def __init__(self, token, lexeme):
+    def __init__(self, token, lexeme, pos_start=None, pos_end=None):
         self.token = token
         self.lexeme = lexeme
+        self.pos_start = pos_start  # Added position information
+        self.pos_end = pos_end   
 
     def __str__(self):
         return f"{self.lexeme}/{self.token}"
@@ -38,6 +40,7 @@ class Scanner:
             "LBRACKET": r"\[",
             "RBRACKET": r"\]",
             "WHITESPACE": r"\s+",
+            "ERR": r"."
         }
         
     def scan(self):
@@ -58,7 +61,9 @@ class Scanner:
                 match = re.match(pattern, self.text[self.pos:])
                 if match:
                     lexeme = match.group(0)
-                    self.tokens.append(Lexeme(token, lexeme))
+                    token_start = self.pos
+                    token_end = self.pos + len(lexeme)
+                    self.tokens.append(Lexeme(token, lexeme, token_start, token_end))
                     self.pos += len(lexeme)
                     matched = True
                     break

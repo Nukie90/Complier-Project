@@ -19,3 +19,4 @@ RPAREN: \)
 LBRACKET: \[
 RBRACKET: \]
 WHITESPACE: \s+
+ERR: .
