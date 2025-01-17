@@ -18,7 +18,7 @@ class Scanner:
         self.tokens = []
         self.token_list = {
             "list": r"list",
-            "REAL": r"[0-9]+\.[0-9]+([eE][+-]?[0-9]+)?",
+            "REAL": r"([0-9]+\.[0-9]*|[0-9]+)([eE][-+]?[0-9]+)?",
             "INT": r"[0-9]+",
             "VAR": r"[a-zA-Z_][a-zA-Z0-9_]*",
             "ASSIGN": r"=",
