@@ -1,0 +1,577 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    POWER
+
+Grammar
+
+Rule 0     S' -> expression
+Rule 1     expression -> term
+Rule 2     expression -> expression PLUS term
+Rule 3     expression -> expression MINUS term
+Rule 4     expression -> assignment
+Rule 5     expression -> array_element
+Rule 6     expression -> comparison
+Rule 7     term -> factor
+Rule 8     term -> term TIMES factor
+Rule 9     term -> term DIVIDE factor
+Rule 10    factor -> NUMBER
+Rule 11    factor -> IDENTIFIER
+Rule 12    factor -> LPAREN expression RPAREN
+Rule 13    factor -> array_element
+Rule 14    assignment -> IDENTIFIER EQUALS expression
+Rule 15    array_element -> IDENTIFIER LBRACKET expression RBRACKET
+Rule 16    comparison -> expression NOTEQUALS factor
+
+Terminals, with rules where they appear
+
+DIVIDE               : 9
+EQUALS               : 14
+IDENTIFIER           : 11 14 15
+LBRACKET             : 15
+LPAREN               : 12
+MINUS                : 3
+NOTEQUALS            : 16
+NUMBER               : 10
+PLUS                 : 2
+POWER                : 
+RBRACKET             : 15
+RPAREN               : 12
+TIMES                : 8
+error                : 
+
+Nonterminals, with rules where they appear
+
+array_element        : 5 13
+assignment           : 4
+comparison           : 6
+expression           : 2 3 12 14 15 16 0
+factor               : 7 8 9 16
+term                 : 1 2 3 8 9
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . expression
+    (1) expression -> . term
+    (2) expression -> . expression PLUS term
+    (3) expression -> . expression MINUS term
+    (4) expression -> . assignment
+    (5) expression -> . array_element
+    (6) expression -> . comparison
+    (7) term -> . factor
+    (8) term -> . term TIMES factor
+    (9) term -> . term DIVIDE factor
+    (14) assignment -> . IDENTIFIER EQUALS expression
+    (15) array_element -> . IDENTIFIER LBRACKET expression RBRACKET
+    (16) comparison -> . expression NOTEQUALS factor
+    (10) factor -> . NUMBER
+    (11) factor -> . IDENTIFIER
+    (12) factor -> . LPAREN expression RPAREN
+    (13) factor -> . array_element
+
+    IDENTIFIER      shift and go to state 7
+    NUMBER          shift and go to state 8
+    LPAREN          shift and go to state 9
+
+    expression                     shift and go to state 1
+    term                           shift and go to state 2
+    assignment                     shift and go to state 3
+    array_element                  shift and go to state 4
+    comparison                     shift and go to state 5
+    factor                         shift and go to state 6
+
+state 1
+
+    (0) S' -> expression .
+    (2) expression -> expression . PLUS term
+    (3) expression -> expression . MINUS term
+    (16) comparison -> expression . NOTEQUALS factor
+
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NOTEQUALS       shift and go to state 12
+
+
+state 2
+
+    (1) expression -> term .
+    (8) term -> term . TIMES factor
+    (9) term -> term . DIVIDE factor
+
+    PLUS            reduce using rule 1 (expression -> term .)
+    MINUS           reduce using rule 1 (expression -> term .)
+    NOTEQUALS       reduce using rule 1 (expression -> term .)
+    $end            reduce using rule 1 (expression -> term .)
+    RPAREN          reduce using rule 1 (expression -> term .)
+    RBRACKET        reduce using rule 1 (expression -> term .)
+    TIMES           shift and go to state 13
+    DIVIDE          shift and go to state 14
+
+
+state 3
+
+    (4) expression -> assignment .
+
+    PLUS            reduce using rule 4 (expression -> assignment .)
+    MINUS           reduce using rule 4 (expression -> assignment .)
+    NOTEQUALS       reduce using rule 4 (expression -> assignment .)
+    $end            reduce using rule 4 (expression -> assignment .)
+    RPAREN          reduce using rule 4 (expression -> assignment .)
+    RBRACKET        reduce using rule 4 (expression -> assignment .)
+
+
+state 4
+
+    (5) expression -> array_element .
+    (13) factor -> array_element .
+
+  ! reduce/reduce conflict for PLUS resolved using rule 5 (expression -> array_element .)
+  ! reduce/reduce conflict for MINUS resolved using rule 5 (expression -> array_element .)
+  ! reduce/reduce conflict for NOTEQUALS resolved using rule 5 (expression -> array_element .)
+  ! reduce/reduce conflict for $end resolved using rule 5 (expression -> array_element .)
+  ! reduce/reduce conflict for RPAREN resolved using rule 5 (expression -> array_element .)
+  ! reduce/reduce conflict for RBRACKET resolved using rule 5 (expression -> array_element .)
+    PLUS            reduce using rule 5 (expression -> array_element .)
+    MINUS           reduce using rule 5 (expression -> array_element .)
+    NOTEQUALS       reduce using rule 5 (expression -> array_element .)
+    $end            reduce using rule 5 (expression -> array_element .)
+    RPAREN          reduce using rule 5 (expression -> array_element .)
+    RBRACKET        reduce using rule 5 (expression -> array_element .)
+    TIMES           reduce using rule 13 (factor -> array_element .)
+    DIVIDE          reduce using rule 13 (factor -> array_element .)
+
+  ! PLUS            [ reduce using rule 13 (factor -> array_element .) ]
+  ! MINUS           [ reduce using rule 13 (factor -> array_element .) ]
+  ! NOTEQUALS       [ reduce using rule 13 (factor -> array_element .) ]
+  ! $end            [ reduce using rule 13 (factor -> array_element .) ]
+  ! RPAREN          [ reduce using rule 13 (factor -> array_element .) ]
+  ! RBRACKET        [ reduce using rule 13 (factor -> array_element .) ]
+
+
+state 5
+
+    (6) expression -> comparison .
+
+    PLUS            reduce using rule 6 (expression -> comparison .)
+    MINUS           reduce using rule 6 (expression -> comparison .)
+    NOTEQUALS       reduce using rule 6 (expression -> comparison .)
+    $end            reduce using rule 6 (expression -> comparison .)
+    RPAREN          reduce using rule 6 (expression -> comparison .)
+    RBRACKET        reduce using rule 6 (expression -> comparison .)
+
+
+state 6
+
+    (7) term -> factor .
+
+    TIMES           reduce using rule 7 (term -> factor .)
+    DIVIDE          reduce using rule 7 (term -> factor .)
+    PLUS            reduce using rule 7 (term -> factor .)
+    MINUS           reduce using rule 7 (term -> factor .)
+    NOTEQUALS       reduce using rule 7 (term -> factor .)
+    $end            reduce using rule 7 (term -> factor .)
+    RPAREN          reduce using rule 7 (term -> factor .)
+    RBRACKET        reduce using rule 7 (term -> factor .)
+
+
+state 7
+
+    (14) assignment -> IDENTIFIER . EQUALS expression
+    (15) array_element -> IDENTIFIER . LBRACKET expression RBRACKET
+    (11) factor -> IDENTIFIER .
+
+    EQUALS          shift and go to state 15
+    LBRACKET        shift and go to state 16
+    TIMES           reduce using rule 11 (factor -> IDENTIFIER .)
+    DIVIDE          reduce using rule 11 (factor -> IDENTIFIER .)
+    PLUS            reduce using rule 11 (factor -> IDENTIFIER .)
+    MINUS           reduce using rule 11 (factor -> IDENTIFIER .)
+    NOTEQUALS       reduce using rule 11 (factor -> IDENTIFIER .)
+    $end            reduce using rule 11 (factor -> IDENTIFIER .)
+    RPAREN          reduce using rule 11 (factor -> IDENTIFIER .)
+    RBRACKET        reduce using rule 11 (factor -> IDENTIFIER .)
+
+
+state 8
+
+    (10) factor -> NUMBER .
+
+    TIMES           reduce using rule 10 (factor -> NUMBER .)
+    DIVIDE          reduce using rule 10 (factor -> NUMBER .)
+    PLUS            reduce using rule 10 (factor -> NUMBER .)
+    MINUS           reduce using rule 10 (factor -> NUMBER .)
+    NOTEQUALS       reduce using rule 10 (factor -> NUMBER .)
+    $end            reduce using rule 10 (factor -> NUMBER .)
+    RPAREN          reduce using rule 10 (factor -> NUMBER .)
+    RBRACKET        reduce using rule 10 (factor -> NUMBER .)
+
+
+state 9
+
+    (12) factor -> LPAREN . expression RPAREN
+    (1) expression -> . term
+    (2) expression -> . expression PLUS term
+    (3) expression -> . expression MINUS term
+    (4) expression -> . assignment
+    (5) expression -> . array_element
+    (6) expression -> . comparison
+    (7) term -> . factor
+    (8) term -> . term TIMES factor
+    (9) term -> . term DIVIDE factor
+    (14) assignment -> . IDENTIFIER EQUALS expression
+    (15) array_element -> . IDENTIFIER LBRACKET expression RBRACKET
+    (16) comparison -> . expression NOTEQUALS factor
+    (10) factor -> . NUMBER
+    (11) factor -> . IDENTIFIER
+    (12) factor -> . LPAREN expression RPAREN
+    (13) factor -> . array_element
+
+    IDENTIFIER      shift and go to state 7
+    NUMBER          shift and go to state 8
+    LPAREN          shift and go to state 9
+
+    expression                     shift and go to state 17
+    term                           shift and go to state 2
+    assignment                     shift and go to state 3
+    array_element                  shift and go to state 4
+    comparison                     shift and go to state 5
+    factor                         shift and go to state 6
+
+state 10
+
+    (2) expression -> expression PLUS . term
+    (7) term -> . factor
+    (8) term -> . term TIMES factor
+    (9) term -> . term DIVIDE factor
+    (10) factor -> . NUMBER
+    (11) factor -> . IDENTIFIER
+    (12) factor -> . LPAREN expression RPAREN
+    (13) factor -> . array_element
+    (15) array_element -> . IDENTIFIER LBRACKET expression RBRACKET
+
+    NUMBER          shift and go to state 8
+    IDENTIFIER      shift and go to state 19
+    LPAREN          shift and go to state 9
+
+    term                           shift and go to state 18
+    factor                         shift and go to state 6
+    array_element                  shift and go to state 20
+
+state 11
+
+    (3) expression -> expression MINUS . term
+    (7) term -> . factor
+    (8) term -> . term TIMES factor
+    (9) term -> . term DIVIDE factor
+    (10) factor -> . NUMBER
+    (11) factor -> . IDENTIFIER
+    (12) factor -> . LPAREN expression RPAREN
+    (13) factor -> . array_element
+    (15) array_element -> . IDENTIFIER LBRACKET expression RBRACKET
+
+    NUMBER          shift and go to state 8
+    IDENTIFIER      shift and go to state 19
+    LPAREN          shift and go to state 9
+
+    term                           shift and go to state 21
+    factor                         shift and go to state 6
+    array_element                  shift and go to state 20
+
+state 12
+
+    (16) comparison -> expression NOTEQUALS . factor
+    (10) factor -> . NUMBER
+    (11) factor -> . IDENTIFIER
+    (12) factor -> . LPAREN expression RPAREN
+    (13) factor -> . array_element
+    (15) array_element -> . IDENTIFIER LBRACKET expression RBRACKET
+
+    NUMBER          shift and go to state 8
+    IDENTIFIER      shift and go to state 19
+    LPAREN          shift and go to state 9
+
+    factor                         shift and go to state 22
+    array_element                  shift and go to state 20
+
+state 13
+
+    (8) term -> term TIMES . factor
+    (10) factor -> . NUMBER
+    (11) factor -> . IDENTIFIER
+    (12) factor -> . LPAREN expression RPAREN
+    (13) factor -> . array_element
+    (15) array_element -> . IDENTIFIER LBRACKET expression RBRACKET
+
+    NUMBER          shift and go to state 8
+    IDENTIFIER      shift and go to state 19
+    LPAREN          shift and go to state 9
+
+    factor                         shift and go to state 23
+    array_element                  shift and go to state 20
+
+state 14
+
+    (9) term -> term DIVIDE . factor
+    (10) factor -> . NUMBER
+    (11) factor -> . IDENTIFIER
+    (12) factor -> . LPAREN expression RPAREN
+    (13) factor -> . array_element
+    (15) array_element -> . IDENTIFIER LBRACKET expression RBRACKET
+
+    NUMBER          shift and go to state 8
+    IDENTIFIER      shift and go to state 19
+    LPAREN          shift and go to state 9
+
+    factor                         shift and go to state 24
+    array_element                  shift and go to state 20
+
+state 15
+
+    (14) assignment -> IDENTIFIER EQUALS . expression
+    (1) expression -> . term
+    (2) expression -> . expression PLUS term
+    (3) expression -> . expression MINUS term
+    (4) expression -> . assignment
+    (5) expression -> . array_element
+    (6) expression -> . comparison
+    (7) term -> . factor
+    (8) term -> . term TIMES factor
+    (9) term -> . term DIVIDE factor
+    (14) assignment -> . IDENTIFIER EQUALS expression
+    (15) array_element -> . IDENTIFIER LBRACKET expression RBRACKET
+    (16) comparison -> . expression NOTEQUALS factor
+    (10) factor -> . NUMBER
+    (11) factor -> . IDENTIFIER
+    (12) factor -> . LPAREN expression RPAREN
+    (13) factor -> . array_element
+
+    IDENTIFIER      shift and go to state 7
+    NUMBER          shift and go to state 8
+    LPAREN          shift and go to state 9
+
+    expression                     shift and go to state 25
+    term                           shift and go to state 2
+    assignment                     shift and go to state 3
+    array_element                  shift and go to state 4
+    comparison                     shift and go to state 5
+    factor                         shift and go to state 6
+
+state 16
+
+    (15) array_element -> IDENTIFIER LBRACKET . expression RBRACKET
+    (1) expression -> . term
+    (2) expression -> . expression PLUS term
+    (3) expression -> . expression MINUS term
+    (4) expression -> . assignment
+    (5) expression -> . array_element
+    (6) expression -> . comparison
+    (7) term -> . factor
+    (8) term -> . term TIMES factor
+    (9) term -> . term DIVIDE factor
+    (14) assignment -> . IDENTIFIER EQUALS expression
+    (15) array_element -> . IDENTIFIER LBRACKET expression RBRACKET
+    (16) comparison -> . expression NOTEQUALS factor
+    (10) factor -> . NUMBER
+    (11) factor -> . IDENTIFIER
+    (12) factor -> . LPAREN expression RPAREN
+    (13) factor -> . array_element
+
+    IDENTIFIER      shift and go to state 7
+    NUMBER          shift and go to state 8
+    LPAREN          shift and go to state 9
+
+    expression                     shift and go to state 26
+    term                           shift and go to state 2
+    assignment                     shift and go to state 3
+    array_element                  shift and go to state 4
+    comparison                     shift and go to state 5
+    factor                         shift and go to state 6
+
+state 17
+
+    (12) factor -> LPAREN expression . RPAREN
+    (2) expression -> expression . PLUS term
+    (3) expression -> expression . MINUS term
+    (16) comparison -> expression . NOTEQUALS factor
+
+    RPAREN          shift and go to state 27
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NOTEQUALS       shift and go to state 12
+
+
+state 18
+
+    (2) expression -> expression PLUS term .
+    (8) term -> term . TIMES factor
+    (9) term -> term . DIVIDE factor
+
+    PLUS            reduce using rule 2 (expression -> expression PLUS term .)
+    MINUS           reduce using rule 2 (expression -> expression PLUS term .)
+    NOTEQUALS       reduce using rule 2 (expression -> expression PLUS term .)
+    $end            reduce using rule 2 (expression -> expression PLUS term .)
+    RPAREN          reduce using rule 2 (expression -> expression PLUS term .)
+    RBRACKET        reduce using rule 2 (expression -> expression PLUS term .)
+    TIMES           shift and go to state 13
+    DIVIDE          shift and go to state 14
+
+
+state 19
+
+    (11) factor -> IDENTIFIER .
+    (15) array_element -> IDENTIFIER . LBRACKET expression RBRACKET
+
+    TIMES           reduce using rule 11 (factor -> IDENTIFIER .)
+    DIVIDE          reduce using rule 11 (factor -> IDENTIFIER .)
+    PLUS            reduce using rule 11 (factor -> IDENTIFIER .)
+    MINUS           reduce using rule 11 (factor -> IDENTIFIER .)
+    NOTEQUALS       reduce using rule 11 (factor -> IDENTIFIER .)
+    $end            reduce using rule 11 (factor -> IDENTIFIER .)
+    RPAREN          reduce using rule 11 (factor -> IDENTIFIER .)
+    RBRACKET        reduce using rule 11 (factor -> IDENTIFIER .)
+    LBRACKET        shift and go to state 16
+
+
+state 20
+
+    (13) factor -> array_element .
+
+    TIMES           reduce using rule 13 (factor -> array_element .)
+    DIVIDE          reduce using rule 13 (factor -> array_element .)
+    PLUS            reduce using rule 13 (factor -> array_element .)
+    MINUS           reduce using rule 13 (factor -> array_element .)
+    NOTEQUALS       reduce using rule 13 (factor -> array_element .)
+    $end            reduce using rule 13 (factor -> array_element .)
+    RPAREN          reduce using rule 13 (factor -> array_element .)
+    RBRACKET        reduce using rule 13 (factor -> array_element .)
+
+
+state 21
+
+    (3) expression -> expression MINUS term .
+    (8) term -> term . TIMES factor
+    (9) term -> term . DIVIDE factor
+
+    PLUS            reduce using rule 3 (expression -> expression MINUS term .)
+    MINUS           reduce using rule 3 (expression -> expression MINUS term .)
+    NOTEQUALS       reduce using rule 3 (expression -> expression MINUS term .)
+    $end            reduce using rule 3 (expression -> expression MINUS term .)
+    RPAREN          reduce using rule 3 (expression -> expression MINUS term .)
+    RBRACKET        reduce using rule 3 (expression -> expression MINUS term .)
+    TIMES           shift and go to state 13
+    DIVIDE          shift and go to state 14
+
+
+state 22
+
+    (16) comparison -> expression NOTEQUALS factor .
+
+    PLUS            reduce using rule 16 (comparison -> expression NOTEQUALS factor .)
+    MINUS           reduce using rule 16 (comparison -> expression NOTEQUALS factor .)
+    NOTEQUALS       reduce using rule 16 (comparison -> expression NOTEQUALS factor .)
+    $end            reduce using rule 16 (comparison -> expression NOTEQUALS factor .)
+    RPAREN          reduce using rule 16 (comparison -> expression NOTEQUALS factor .)
+    RBRACKET        reduce using rule 16 (comparison -> expression NOTEQUALS factor .)
+
+
+state 23
+
+    (8) term -> term TIMES factor .
+
+    TIMES           reduce using rule 8 (term -> term TIMES factor .)
+    DIVIDE          reduce using rule 8 (term -> term TIMES factor .)
+    PLUS            reduce using rule 8 (term -> term TIMES factor .)
+    MINUS           reduce using rule 8 (term -> term TIMES factor .)
+    NOTEQUALS       reduce using rule 8 (term -> term TIMES factor .)
+    $end            reduce using rule 8 (term -> term TIMES factor .)
+    RPAREN          reduce using rule 8 (term -> term TIMES factor .)
+    RBRACKET        reduce using rule 8 (term -> term TIMES factor .)
+
+
+state 24
+
+    (9) term -> term DIVIDE factor .
+
+    TIMES           reduce using rule 9 (term -> term DIVIDE factor .)
+    DIVIDE          reduce using rule 9 (term -> term DIVIDE factor .)
+    PLUS            reduce using rule 9 (term -> term DIVIDE factor .)
+    MINUS           reduce using rule 9 (term -> term DIVIDE factor .)
+    NOTEQUALS       reduce using rule 9 (term -> term DIVIDE factor .)
+    $end            reduce using rule 9 (term -> term DIVIDE factor .)
+    RPAREN          reduce using rule 9 (term -> term DIVIDE factor .)
+    RBRACKET        reduce using rule 9 (term -> term DIVIDE factor .)
+
+
+state 25
+
+    (14) assignment -> IDENTIFIER EQUALS expression .
+    (2) expression -> expression . PLUS term
+    (3) expression -> expression . MINUS term
+    (16) comparison -> expression . NOTEQUALS factor
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for NOTEQUALS resolved as shift
+    $end            reduce using rule 14 (assignment -> IDENTIFIER EQUALS expression .)
+    RPAREN          reduce using rule 14 (assignment -> IDENTIFIER EQUALS expression .)
+    RBRACKET        reduce using rule 14 (assignment -> IDENTIFIER EQUALS expression .)
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NOTEQUALS       shift and go to state 12
+
+  ! PLUS            [ reduce using rule 14 (assignment -> IDENTIFIER EQUALS expression .) ]
+  ! MINUS           [ reduce using rule 14 (assignment -> IDENTIFIER EQUALS expression .) ]
+  ! NOTEQUALS       [ reduce using rule 14 (assignment -> IDENTIFIER EQUALS expression .) ]
+
+
+state 26
+
+    (15) array_element -> IDENTIFIER LBRACKET expression . RBRACKET
+    (2) expression -> expression . PLUS term
+    (3) expression -> expression . MINUS term
+    (16) comparison -> expression . NOTEQUALS factor
+
+    RBRACKET        shift and go to state 28
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    NOTEQUALS       shift and go to state 12
+
+
+state 27
+
+    (12) factor -> LPAREN expression RPAREN .
+
+    TIMES           reduce using rule 12 (factor -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 12 (factor -> LPAREN expression RPAREN .)
+    PLUS            reduce using rule 12 (factor -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 12 (factor -> LPAREN expression RPAREN .)
+    NOTEQUALS       reduce using rule 12 (factor -> LPAREN expression RPAREN .)
+    $end            reduce using rule 12 (factor -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 12 (factor -> LPAREN expression RPAREN .)
+    RBRACKET        reduce using rule 12 (factor -> LPAREN expression RPAREN .)
+
+
+state 28
+
+    (15) array_element -> IDENTIFIER LBRACKET expression RBRACKET .
+
+    PLUS            reduce using rule 15 (array_element -> IDENTIFIER LBRACKET expression RBRACKET .)
+    MINUS           reduce using rule 15 (array_element -> IDENTIFIER LBRACKET expression RBRACKET .)
+    NOTEQUALS       reduce using rule 15 (array_element -> IDENTIFIER LBRACKET expression RBRACKET .)
+    $end            reduce using rule 15 (array_element -> IDENTIFIER LBRACKET expression RBRACKET .)
+    TIMES           reduce using rule 15 (array_element -> IDENTIFIER LBRACKET expression RBRACKET .)
+    DIVIDE          reduce using rule 15 (array_element -> IDENTIFIER LBRACKET expression RBRACKET .)
+    RPAREN          reduce using rule 15 (array_element -> IDENTIFIER LBRACKET expression RBRACKET .)
+    RBRACKET        reduce using rule 15 (array_element -> IDENTIFIER LBRACKET expression RBRACKET .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for PLUS in state 25 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 25 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUALS in state 25 resolved as shift
+WARNING: reduce/reduce conflict in state 4 resolved using rule (expression -> array_element)
+WARNING: rejected rule (factor -> array_element) in state 4
