@@ -73,6 +73,8 @@ TT_MUL      = 'MUL'
 TT_DIV      = 'DIV'
 TT_LPAREN   = 'LPAREN'
 TT_RPAREN   = 'RPAREN'
+TT_LSQUARE  = 'LSQUARE'
+TT_RSQUARE  = 'RSQUARE'
 TT_EOF			= 'EOF'
 TT_IDENTIFIER = 'IDENTIFIER'
 TT_EQ = 'EQ'
@@ -116,27 +118,33 @@ class Lexer:
 
 				while self.current_char != None:
 						if self.current_char in ' \t':
-								self.advance()
+							self.advance()
 						elif self.current_char in DIGITS:
-								tokens.append(self.make_number())
+							tokens.append(self.make_number())
 						elif self.current_char == '+':
-								tokens.append(Token(TT_PLUS, pos_start=self.pos))
-								self.advance()
+							tokens.append(Token(TT_PLUS, pos_start=self.pos))
+							self.advance()
 						elif self.current_char == '-':
-								tokens.append(Token(TT_MINUS, pos_start=self.pos))
-								self.advance()
+							tokens.append(Token(TT_MINUS, pos_start=self.pos))
+							self.advance()
 						elif self.current_char == '*':
-								tokens.append(Token(TT_MUL, pos_start=self.pos))
-								self.advance()
+							tokens.append(Token(TT_MUL, pos_start=self.pos))
+							self.advance()
 						elif self.current_char == '/':
-								tokens.append(Token(TT_DIV, pos_start=self.pos))
-								self.advance()
+							tokens.append(Token(TT_DIV, pos_start=self.pos))
+							self.advance()
 						elif self.current_char == '(':
-								tokens.append(Token(TT_LPAREN, pos_start=self.pos))
-								self.advance()
+							tokens.append(Token(TT_LPAREN, pos_start=self.pos))
+							self.advance()
 						elif self.current_char == ')':
-								tokens.append(Token(TT_RPAREN, pos_start=self.pos))
-								self.advance()
+							tokens.append(Token(TT_RPAREN, pos_start=self.pos))
+							self.advance()
+						elif self.current_char == '[':
+							tokens.append(Token(TT_LSQUARE, pos_start=self.pos))
+							self.advance()
+						elif self.current_char == ']':
+							tokens.append(Token(TT_RSQUARE, pos_start=self.pos))
+							self.advance()
 						elif self.current_char.isalpha():
 							tokens.append(self.make_identifier())
 						elif self.current_char == '=':
@@ -310,6 +318,19 @@ class Parser:
 				return res.failure(InvalidSyntaxError(
 					self.current_tok.pos_start, self.current_tok.pos_end,
 					"Expected ')'"
+				))
+			
+		elif tok.type == TT_LSQUARE:
+			res.register(self.advance())
+			index = res.register(self.expr())
+			if res.error: return res
+			if self.current_tok.type == TT_RSQUARE:
+				res.register(self.advance())
+				return res.success(index)
+			else:
+				return res.failure(InvalidSyntaxError(
+					self.current_tok.pos_start, self.current_tok.pos_end,
+					"Expected ']'"
 				))
 
 		return res.failure(InvalidSyntaxError(
