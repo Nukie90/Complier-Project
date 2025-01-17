@@ -15,17 +15,18 @@ DIGITS = '0123456789'
 #######################################
 
 class Error:
-		def __init__(self, pos_start, pos_end, error_name, details):
-				self.pos_start = pos_start
-				self.pos_end = pos_end
-				self.error_name = error_name
-				self.details = details
-		
-		def as_string(self):
-				result  = f'{self.error_name}: {self.details}\n'
-				result += f'File {self.pos_start.fn}, line {self.pos_start.ln + 1}'
-				result += '\n\n' + string_with_arrows(self.pos_start.ftxt, self.pos_start, self.pos_end)
-				return result
+    def __init__(self, pos_start, pos_end, error_name, details):
+        self.pos_start = pos_start
+        self.pos_end = pos_end
+        self.error_name = error_name
+        self.details = details
+
+    def as_string(self):
+        result = f'{self.error_name} at line {self.pos_start.ln + 1}, pos {self.pos_start.col + 1}'
+        result += f'\n{self.details}\n'
+        if self.error_name == 'Runtime Error':
+            return ''  # Return empty string if it's a runtime error
+        return result
 
 class IllegalCharError(Error):
 		def __init__(self, pos_start, pos_end, details):
@@ -33,7 +34,7 @@ class IllegalCharError(Error):
 
 class InvalidSyntaxError(Error):
 		def __init__(self, pos_start, pos_end, details=''):
-				super().__init__(pos_start, pos_end, 'Invalid Syntax', details)
+				super().__init__(pos_start, pos_end, 'Syntax Error', details)
 
 #######################################
 # POSITION
@@ -73,6 +74,9 @@ TT_DIV      = 'DIV'
 TT_LPAREN   = 'LPAREN'
 TT_RPAREN   = 'RPAREN'
 TT_EOF			= 'EOF'
+TT_IDENTIFIER = 'IDENTIFIER'
+TT_EQ = 'EQ'
+TT_NE = 'NE'
 
 class Token:
 		def __init__(self, type_, value=None, pos_start=None, pos_end=None):
@@ -107,7 +111,7 @@ class Lexer:
 				self.pos.advance(self.current_char)
 				self.current_char = self.text[self.pos.idx] if self.pos.idx < len(self.text) else None
 
-		def scan(self):
+		def make_tokens(self):
 				tokens = []
 
 				while self.current_char != None:
@@ -133,6 +137,17 @@ class Lexer:
 						elif self.current_char == ')':
 								tokens.append(Token(TT_RPAREN, pos_start=self.pos))
 								self.advance()
+						elif self.current_char.isalpha():
+							tokens.append(self.make_identifier())
+						elif self.current_char == '=':
+							tokens.append(Token(TT_EQ, pos_start=self.pos))
+							self.advance()
+						elif self.current_char == '!':
+							if self.text[self.pos.idx + 1] == '=':
+								tokens.append(Token(TT_NE, pos_start=self.pos))
+								self.advance()
+								self.advance()
+
 						else:
 								pos_start = self.pos.copy()
 								char = self.current_char
@@ -141,6 +156,17 @@ class Lexer:
 
 				tokens.append(Token(TT_EOF, pos_start=self.pos))
 				return tokens, None
+		
+		def make_identifier(self):
+			id_str = ''
+			pos_start = self.pos.copy()
+
+			while self.current_char != None and (self.current_char.isalnum() or self.current_char == '_'):
+				id_str += self.current_char
+				self.advance()
+
+			return Token(TT_IDENTIFIER, id_str, pos_start, self.pos)
+
 
 		def make_number(self):
 				num_str = ''
@@ -180,6 +206,21 @@ class BinOpNode:
 
 	def __repr__(self):
 		return f'({self.left_node}, {self.op_tok}, {self.right_node})'
+	
+class VarAssignNode:
+    def __init__(self, var_name_tok, value_node):
+        self.var_name_tok = var_name_tok
+        self.value_node = value_node
+
+    def __repr__(self):
+        return f'({self.var_name_tok} = {self.value_node})'
+
+class VarAccessNode:
+    def __init__(self, var_name_tok):
+        self.var_name_tok = var_name_tok
+
+    def __repr__(self):
+        return f'{self.var_name_tok}'
 
 class UnaryOpNode:
 	def __init__(self, op_tok, node):
@@ -244,38 +285,54 @@ class Parser:
 		res = ParseResult()
 		tok = self.current_tok
 
-		if isinstance(tok, list):
-			if len(tok) == 0:
-				return res.failure(InvalidSyntaxError(
-					tok[0].pos_start, tok[0].pos_end,
-					"Unexpected empty token list"
-                ))
-			for t in tok:
-				if t.type in (TT_PLUS, TT_MINUS):
-					res.register(self.advance())
-					factor = res.register(self.factor())
-					if res.error:
-						return res
-					return res.success(UnaryOpNode(t, factor))
-			return res.failure(InvalidSyntaxError(
-				tok[0].pos_start, tok[0].pos_end,
-                "Expected int or float"
-            ))
 		if tok.type in (TT_PLUS, TT_MINUS):
 			res.register(self.advance())
 			factor = res.register(self.factor())
-			if res.error:
-				return res
+			if res.error: return res
 			return res.success(UnaryOpNode(tok, factor))
+
 		elif tok.type in (TT_INT, TT_FLOAT):
 			res.register(self.advance())
-		
+			return res.success(NumberNode(tok))
+
+		elif tok.type == TT_IDENTIFIER:
+			res.register(self.advance())
+			return res.success(VarAccessNode(tok))
+
+		elif tok.type == TT_LPAREN:
+			res.register(self.advance())
+			expr = res.register(self.expr())
+			if res.error: return res
+			if self.current_tok.type == TT_RPAREN:
+				res.register(self.advance())
+				return res.success(expr)
+			else:
+				return res.failure(InvalidSyntaxError(
+					self.current_tok.pos_start, self.current_tok.pos_end,
+					"Expected ')'"
+				))
+
+		return res.failure(InvalidSyntaxError(
+			tok.pos_start, tok.pos_end,
+			"Expected int, float, or identifier"
+		))
+
+	def expr(self):
+		res = ParseResult()
+
+		if self.current_tok.type == TT_IDENTIFIER and self.tokens[self.tok_idx + 1].type == TT_EQ:
+			var_name = self.current_tok
+			res.register(self.advance())
+			res.register(self.advance())
+			expr = res.register(self.expr())
+			if res.error: return res
+			return res.success(VarAssignNode(var_name, expr))
+
+		return self.bin_op(self.term, (TT_PLUS, TT_MINUS))
 
 	def term(self):
 		return self.bin_op(self.factor, (TT_MUL, TT_DIV))
 
-	def expr(self):
-		return self.bin_op(self.term, (TT_PLUS, TT_MINUS))
 
 	###################################
 
@@ -297,38 +354,80 @@ class Parser:
 # RUN
 #######################################
 
+def evaluate(node, symbol_table, fn, text):
+    if isinstance(node, NumberNode):
+        return f'({node.tok.value})'
+
+    elif isinstance(node, VarAccessNode):
+        var_name = node.var_name_tok.value
+        if var_name not in symbol_table:
+            pos = node.var_name_tok.pos_start
+            raise Exception(f"Undefined variable {var_name} at line {pos.ln + 1}, pos {pos.col + 1}")
+        value = symbol_table[var_name]
+        if isinstance(value, list) and isinstance(node.index, NumberNode):
+            index = node.index.tok.value
+            return f'{var_name}[( {index} )]'
+        return f'{var_name}'
+
+    elif isinstance(node, VarAssignNode):
+        var_name = node.var_name_tok.value
+        value = evaluate(node.value_node, symbol_table, fn, text).replace('(', '').replace(')', '')
+        symbol_table[var_name] = value
+        return f'({var_name}={value})'
+
+    elif isinstance(node, BinOpNode):
+        left = evaluate(node.left_node, symbol_table, fn, text).replace('(', '').replace(')', '')
+        right = evaluate(node.right_node, symbol_table, fn, text).replace('(', '').replace(')', '')
+        # Add proper spacing between operators
+        if node.op_tok.type == TT_PLUS:
+            return f'({left} + {right})'
+        elif node.op_tok.type == TT_MINUS:
+            return f'({left} - {right})'
+        elif node.op_tok.type == TT_MUL:
+            return f'({left} * {right})'
+        elif node.op_tok.type == TT_DIV:
+            return f'({left} / {right})'
+
+    elif isinstance(node, UnaryOpNode):
+        value = evaluate(node.node, symbol_table, fn, text).replace('(', '').replace(')', '')
+        return f'({node.op_tok.type}{value})'
+	
+
+    return (f"Invalid syntax at line {node.pos_start.ln + 1}, pos {node.pos_start.col + 1}")
+
+
+symbol_table = {}
+
 def run(fn, text):
-    lexer = Lexer(text)
-    tokens = lexer.scan()
-    
-    print("Tokens:", tokens)
+    global symbol_table
+
+    lexer = Lexer(fn, text)
+    tokens, error = lexer.make_tokens()
+    if error:
+        return None, error  # 'error' is already an instance of 'Error'
 
     parser = Parser(tokens)
     ast = parser.parse()
+    if ast.error:
+        return None, ast.error  # Return the actual error object
 
-    return ast.node
+    try:
+        result = evaluate(ast.node, symbol_table, fn, text)
+        return result, None
+    except Exception as e:
+        return None, Error(Position(0, 0, 0, fn, text), Position(0, 0, 0, fn, text), "Runtime Error", str(e))
 
-def process_file():
-    with open("input.txt", "r") as f:
-        lines = f.readlines()
+
+if __name__ == '__main__':
+    with open('input.txt', 'r') as file:
+        lines = file.readlines()
     
-    with open("output.tok", "w") as f:
-        for line in lines:
-            scanner = Lexer('<stdin>', line)
-            tokens = scanner.scan()
-            f.write(str(scanner) + "\n")
-            print("\ntokens: ", tokens)
+    for line in lines:
+        text = line.strip()
+        if text:  # Ignore empty lines
+            result, error = run('<stdin>', text)
 
-            parser = Parser(tokens)
-            ast = parser.parse()
-
-            print("parser: ", ast.node)
-            
-    #grammar
-    # with open("output.lex", "w") as f:
-    #     for value, regex in scanner.token_list.items():
-    #         f.write(f"{value}: {regex}\n")
-            
-if __name__ == "__main__":
-    process_file()
-	
+            if error:
+                print(error.as_string())
+            else:
+                print(result)
