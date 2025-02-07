@@ -1,0 +1,17 @@
+<program> ::= <statement> | <expression> | <statement> <program> | <expression> <program>
+<statement> ::= <VAR> <ASSIGN> <expression>
+<statement> ::= <VAR> <ASSIGN> <LIST> <LBRACKET> <expression> <RBRACKET>
+<expression> ::= <SUB> <expression> %prec UMINUS
+<expression> ::= <SUB> <VAR> %prec UMINUS
+<expression> ::= <expression> <ADD> <expression> | <expression> <SUB> <expression>
+<expression> ::= <expression> <MUL> <expression> | <expression> <DIV> <expression>
+<expression> ::= <expression> <IDIV> <expression>
+<expression> ::= <expression> <POW> <expression>
+<expression> ::= <LPAREN> <expression> <RPAREN>
+<expression> ::= <INT> | <REAL>
+<expression> ::= <VAR>
+<expression> ::= <VAR> <LBRACKET> <expression> <RBRACKET>
+<expression> ::= <expression> <LT> <expression> | <expression> <LE> <expression>
+<expression> ::= <expression> <GT> <expression> | <expression> <GE> <expression>
+<expression> ::= <expression> <EQ> <expression> | <expression> <NE> <expression>
+<expression> ::= <VAR> <DIV_ASSIGN> <expression>

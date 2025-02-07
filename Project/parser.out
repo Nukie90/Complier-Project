@@ -1,0 +1,738 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> statement
+Rule 1     statement -> statement statement
+Rule 2     statement -> statement_expr
+Rule 3     statement -> statement_assign
+Rule 4     statement -> statement_list_decl
+Rule 5     statement -> expression
+Rule 6     statement_expr -> expression
+Rule 7     statement_assign -> ID EQUALS expression
+Rule 8     statement_list_decl -> LIST ID LBRACKET INT RBRACKET
+Rule 9     expression -> expression ADD expression
+Rule 10    expression -> expression SUB expression
+Rule 11    expression -> expression MUL expression
+Rule 12    expression -> expression DIV expression
+Rule 13    expression -> expression EXP expression
+Rule 14    expression -> expression NE expression
+Rule 15    expression -> INT
+Rule 16    expression -> REAL
+Rule 17    expression -> ID
+Rule 18    expression -> ID LBRACKET INT RBRACKET
+
+Terminals, with rules where they appear
+
+ADD                  : 9
+DIV                  : 12
+EQUALS               : 7
+EXP                  : 13
+ID                   : 7 8 17 18
+INT                  : 8 15 18
+LBRACKET             : 8 18
+LIST                 : 8
+MUL                  : 11
+NE                   : 14
+RBRACKET             : 8 18
+REAL                 : 16
+SUB                  : 10
+error                : 
+
+Nonterminals, with rules where they appear
+
+expression           : 5 6 7 9 9 10 10 11 11 12 12 13 13 14 14
+statement            : 1 1 0
+statement_assign     : 3
+statement_expr       : 2
+statement_list_decl  : 4
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . statement
+    (1) statement -> . statement statement
+    (2) statement -> . statement_expr
+    (3) statement -> . statement_assign
+    (4) statement -> . statement_list_decl
+    (5) statement -> . expression
+    (6) statement_expr -> . expression
+    (7) statement_assign -> . ID EQUALS expression
+    (8) statement_list_decl -> . LIST ID LBRACKET INT RBRACKET
+    (9) expression -> . expression ADD expression
+    (10) expression -> . expression SUB expression
+    (11) expression -> . expression MUL expression
+    (12) expression -> . expression DIV expression
+    (13) expression -> . expression EXP expression
+    (14) expression -> . expression NE expression
+    (15) expression -> . INT
+    (16) expression -> . REAL
+    (17) expression -> . ID
+    (18) expression -> . ID LBRACKET INT RBRACKET
+
+    ID              shift and go to state 6
+    LIST            shift and go to state 7
+    INT             shift and go to state 8
+    REAL            shift and go to state 9
+
+    statement                      shift and go to state 1
+    statement_expr                 shift and go to state 2
+    statement_assign               shift and go to state 3
+    statement_list_decl            shift and go to state 4
+    expression                     shift and go to state 5
+
+state 1
+
+    (0) S' -> statement .
+    (1) statement -> statement . statement
+    (1) statement -> . statement statement
+    (2) statement -> . statement_expr
+    (3) statement -> . statement_assign
+    (4) statement -> . statement_list_decl
+    (5) statement -> . expression
+    (6) statement_expr -> . expression
+    (7) statement_assign -> . ID EQUALS expression
+    (8) statement_list_decl -> . LIST ID LBRACKET INT RBRACKET
+    (9) expression -> . expression ADD expression
+    (10) expression -> . expression SUB expression
+    (11) expression -> . expression MUL expression
+    (12) expression -> . expression DIV expression
+    (13) expression -> . expression EXP expression
+    (14) expression -> . expression NE expression
+    (15) expression -> . INT
+    (16) expression -> . REAL
+    (17) expression -> . ID
+    (18) expression -> . ID LBRACKET INT RBRACKET
+
+    ID              shift and go to state 6
+    LIST            shift and go to state 7
+    INT             shift and go to state 8
+    REAL            shift and go to state 9
+
+    statement                      shift and go to state 10
+    statement_expr                 shift and go to state 2
+    statement_assign               shift and go to state 3
+    statement_list_decl            shift and go to state 4
+    expression                     shift and go to state 5
+
+state 2
+
+    (2) statement -> statement_expr .
+
+    ID              reduce using rule 2 (statement -> statement_expr .)
+    LIST            reduce using rule 2 (statement -> statement_expr .)
+    INT             reduce using rule 2 (statement -> statement_expr .)
+    REAL            reduce using rule 2 (statement -> statement_expr .)
+    $end            reduce using rule 2 (statement -> statement_expr .)
+
+
+state 3
+
+    (3) statement -> statement_assign .
+
+    ID              reduce using rule 3 (statement -> statement_assign .)
+    LIST            reduce using rule 3 (statement -> statement_assign .)
+    INT             reduce using rule 3 (statement -> statement_assign .)
+    REAL            reduce using rule 3 (statement -> statement_assign .)
+    $end            reduce using rule 3 (statement -> statement_assign .)
+
+
+state 4
+
+    (4) statement -> statement_list_decl .
+
+    ID              reduce using rule 4 (statement -> statement_list_decl .)
+    LIST            reduce using rule 4 (statement -> statement_list_decl .)
+    INT             reduce using rule 4 (statement -> statement_list_decl .)
+    REAL            reduce using rule 4 (statement -> statement_list_decl .)
+    $end            reduce using rule 4 (statement -> statement_list_decl .)
+
+
+state 5
+
+    (5) statement -> expression .
+    (6) statement_expr -> expression .
+    (9) expression -> expression . ADD expression
+    (10) expression -> expression . SUB expression
+    (11) expression -> expression . MUL expression
+    (12) expression -> expression . DIV expression
+    (13) expression -> expression . EXP expression
+    (14) expression -> expression . NE expression
+
+  ! reduce/reduce conflict for ID resolved using rule 5 (statement -> expression .)
+  ! reduce/reduce conflict for LIST resolved using rule 5 (statement -> expression .)
+  ! reduce/reduce conflict for INT resolved using rule 5 (statement -> expression .)
+  ! reduce/reduce conflict for REAL resolved using rule 5 (statement -> expression .)
+  ! reduce/reduce conflict for $end resolved using rule 5 (statement -> expression .)
+    ID              reduce using rule 5 (statement -> expression .)
+    LIST            reduce using rule 5 (statement -> expression .)
+    INT             reduce using rule 5 (statement -> expression .)
+    REAL            reduce using rule 5 (statement -> expression .)
+    $end            reduce using rule 5 (statement -> expression .)
+    ADD             shift and go to state 11
+    SUB             shift and go to state 12
+    MUL             shift and go to state 13
+    DIV             shift and go to state 14
+    EXP             shift and go to state 15
+    NE              shift and go to state 16
+
+  ! ID              [ reduce using rule 6 (statement_expr -> expression .) ]
+  ! LIST            [ reduce using rule 6 (statement_expr -> expression .) ]
+  ! INT             [ reduce using rule 6 (statement_expr -> expression .) ]
+  ! REAL            [ reduce using rule 6 (statement_expr -> expression .) ]
+  ! $end            [ reduce using rule 6 (statement_expr -> expression .) ]
+
+
+state 6
+
+    (7) statement_assign -> ID . EQUALS expression
+    (17) expression -> ID .
+    (18) expression -> ID . LBRACKET INT RBRACKET
+
+    EQUALS          shift and go to state 17
+    ADD             reduce using rule 17 (expression -> ID .)
+    SUB             reduce using rule 17 (expression -> ID .)
+    MUL             reduce using rule 17 (expression -> ID .)
+    DIV             reduce using rule 17 (expression -> ID .)
+    EXP             reduce using rule 17 (expression -> ID .)
+    NE              reduce using rule 17 (expression -> ID .)
+    ID              reduce using rule 17 (expression -> ID .)
+    LIST            reduce using rule 17 (expression -> ID .)
+    INT             reduce using rule 17 (expression -> ID .)
+    REAL            reduce using rule 17 (expression -> ID .)
+    $end            reduce using rule 17 (expression -> ID .)
+    LBRACKET        shift and go to state 18
+
+
+state 7
+
+    (8) statement_list_decl -> LIST . ID LBRACKET INT RBRACKET
+
+    ID              shift and go to state 19
+
+
+state 8
+
+    (15) expression -> INT .
+
+    ADD             reduce using rule 15 (expression -> INT .)
+    SUB             reduce using rule 15 (expression -> INT .)
+    MUL             reduce using rule 15 (expression -> INT .)
+    DIV             reduce using rule 15 (expression -> INT .)
+    EXP             reduce using rule 15 (expression -> INT .)
+    NE              reduce using rule 15 (expression -> INT .)
+    ID              reduce using rule 15 (expression -> INT .)
+    LIST            reduce using rule 15 (expression -> INT .)
+    INT             reduce using rule 15 (expression -> INT .)
+    REAL            reduce using rule 15 (expression -> INT .)
+    $end            reduce using rule 15 (expression -> INT .)
+
+
+state 9
+
+    (16) expression -> REAL .
+
+    ADD             reduce using rule 16 (expression -> REAL .)
+    SUB             reduce using rule 16 (expression -> REAL .)
+    MUL             reduce using rule 16 (expression -> REAL .)
+    DIV             reduce using rule 16 (expression -> REAL .)
+    EXP             reduce using rule 16 (expression -> REAL .)
+    NE              reduce using rule 16 (expression -> REAL .)
+    ID              reduce using rule 16 (expression -> REAL .)
+    LIST            reduce using rule 16 (expression -> REAL .)
+    INT             reduce using rule 16 (expression -> REAL .)
+    REAL            reduce using rule 16 (expression -> REAL .)
+    $end            reduce using rule 16 (expression -> REAL .)
+
+
+state 10
+
+    (1) statement -> statement statement .
+    (1) statement -> statement . statement
+    (1) statement -> . statement statement
+    (2) statement -> . statement_expr
+    (3) statement -> . statement_assign
+    (4) statement -> . statement_list_decl
+    (5) statement -> . expression
+    (6) statement_expr -> . expression
+    (7) statement_assign -> . ID EQUALS expression
+    (8) statement_list_decl -> . LIST ID LBRACKET INT RBRACKET
+    (9) expression -> . expression ADD expression
+    (10) expression -> . expression SUB expression
+    (11) expression -> . expression MUL expression
+    (12) expression -> . expression DIV expression
+    (13) expression -> . expression EXP expression
+    (14) expression -> . expression NE expression
+    (15) expression -> . INT
+    (16) expression -> . REAL
+    (17) expression -> . ID
+    (18) expression -> . ID LBRACKET INT RBRACKET
+
+  ! shift/reduce conflict for ID resolved as shift
+  ! shift/reduce conflict for LIST resolved as shift
+  ! shift/reduce conflict for INT resolved as shift
+  ! shift/reduce conflict for REAL resolved as shift
+    $end            reduce using rule 1 (statement -> statement statement .)
+    ID              shift and go to state 6
+    LIST            shift and go to state 7
+    INT             shift and go to state 8
+    REAL            shift and go to state 9
+
+  ! ID              [ reduce using rule 1 (statement -> statement statement .) ]
+  ! LIST            [ reduce using rule 1 (statement -> statement statement .) ]
+  ! INT             [ reduce using rule 1 (statement -> statement statement .) ]
+  ! REAL            [ reduce using rule 1 (statement -> statement statement .) ]
+
+    statement                      shift and go to state 10
+    statement_expr                 shift and go to state 2
+    statement_assign               shift and go to state 3
+    statement_list_decl            shift and go to state 4
+    expression                     shift and go to state 5
+
+state 11
+
+    (9) expression -> expression ADD . expression
+    (9) expression -> . expression ADD expression
+    (10) expression -> . expression SUB expression
+    (11) expression -> . expression MUL expression
+    (12) expression -> . expression DIV expression
+    (13) expression -> . expression EXP expression
+    (14) expression -> . expression NE expression
+    (15) expression -> . INT
+    (16) expression -> . REAL
+    (17) expression -> . ID
+    (18) expression -> . ID LBRACKET INT RBRACKET
+
+    INT             shift and go to state 8
+    REAL            shift and go to state 9
+    ID              shift and go to state 21
+
+    expression                     shift and go to state 20
+
+state 12
+
+    (10) expression -> expression SUB . expression
+    (9) expression -> . expression ADD expression
+    (10) expression -> . expression SUB expression
+    (11) expression -> . expression MUL expression
+    (12) expression -> . expression DIV expression
+    (13) expression -> . expression EXP expression
+    (14) expression -> . expression NE expression
+    (15) expression -> . INT
+    (16) expression -> . REAL
+    (17) expression -> . ID
+    (18) expression -> . ID LBRACKET INT RBRACKET
+
+    INT             shift and go to state 8
+    REAL            shift and go to state 9
+    ID              shift and go to state 21
+
+    expression                     shift and go to state 22
+
+state 13
+
+    (11) expression -> expression MUL . expression
+    (9) expression -> . expression ADD expression
+    (10) expression -> . expression SUB expression
+    (11) expression -> . expression MUL expression
+    (12) expression -> . expression DIV expression
+    (13) expression -> . expression EXP expression
+    (14) expression -> . expression NE expression
+    (15) expression -> . INT
+    (16) expression -> . REAL
+    (17) expression -> . ID
+    (18) expression -> . ID LBRACKET INT RBRACKET
+
+    INT             shift and go to state 8
+    REAL            shift and go to state 9
+    ID              shift and go to state 21
+
+    expression                     shift and go to state 23
+
+state 14
+
+    (12) expression -> expression DIV . expression
+    (9) expression -> . expression ADD expression
+    (10) expression -> . expression SUB expression
+    (11) expression -> . expression MUL expression
+    (12) expression -> . expression DIV expression
+    (13) expression -> . expression EXP expression
+    (14) expression -> . expression NE expression
+    (15) expression -> . INT
+    (16) expression -> . REAL
+    (17) expression -> . ID
+    (18) expression -> . ID LBRACKET INT RBRACKET
+
+    INT             shift and go to state 8
+    REAL            shift and go to state 9
+    ID              shift and go to state 21
+
+    expression                     shift and go to state 24
+
+state 15
+
+    (13) expression -> expression EXP . expression
+    (9) expression -> . expression ADD expression
+    (10) expression -> . expression SUB expression
+    (11) expression -> . expression MUL expression
+    (12) expression -> . expression DIV expression
+    (13) expression -> . expression EXP expression
+    (14) expression -> . expression NE expression
+    (15) expression -> . INT
+    (16) expression -> . REAL
+    (17) expression -> . ID
+    (18) expression -> . ID LBRACKET INT RBRACKET
+
+    INT             shift and go to state 8
+    REAL            shift and go to state 9
+    ID              shift and go to state 21
+
+    expression                     shift and go to state 25
+
+state 16
+
+    (14) expression -> expression NE . expression
+    (9) expression -> . expression ADD expression
+    (10) expression -> . expression SUB expression
+    (11) expression -> . expression MUL expression
+    (12) expression -> . expression DIV expression
+    (13) expression -> . expression EXP expression
+    (14) expression -> . expression NE expression
+    (15) expression -> . INT
+    (16) expression -> . REAL
+    (17) expression -> . ID
+    (18) expression -> . ID LBRACKET INT RBRACKET
+
+    INT             shift and go to state 8
+    REAL            shift and go to state 9
+    ID              shift and go to state 21
+
+    expression                     shift and go to state 26
+
+state 17
+
+    (7) statement_assign -> ID EQUALS . expression
+    (9) expression -> . expression ADD expression
+    (10) expression -> . expression SUB expression
+    (11) expression -> . expression MUL expression
+    (12) expression -> . expression DIV expression
+    (13) expression -> . expression EXP expression
+    (14) expression -> . expression NE expression
+    (15) expression -> . INT
+    (16) expression -> . REAL
+    (17) expression -> . ID
+    (18) expression -> . ID LBRACKET INT RBRACKET
+
+    INT             shift and go to state 8
+    REAL            shift and go to state 9
+    ID              shift and go to state 21
+
+    expression                     shift and go to state 27
+
+state 18
+
+    (18) expression -> ID LBRACKET . INT RBRACKET
+
+    INT             shift and go to state 28
+
+
+state 19
+
+    (8) statement_list_decl -> LIST ID . LBRACKET INT RBRACKET
+
+    LBRACKET        shift and go to state 29
+
+
+state 20
+
+    (9) expression -> expression ADD expression .
+    (9) expression -> expression . ADD expression
+    (10) expression -> expression . SUB expression
+    (11) expression -> expression . MUL expression
+    (12) expression -> expression . DIV expression
+    (13) expression -> expression . EXP expression
+    (14) expression -> expression . NE expression
+
+    ADD             reduce using rule 9 (expression -> expression ADD expression .)
+    SUB             reduce using rule 9 (expression -> expression ADD expression .)
+    NE              reduce using rule 9 (expression -> expression ADD expression .)
+    ID              reduce using rule 9 (expression -> expression ADD expression .)
+    LIST            reduce using rule 9 (expression -> expression ADD expression .)
+    INT             reduce using rule 9 (expression -> expression ADD expression .)
+    REAL            reduce using rule 9 (expression -> expression ADD expression .)
+    $end            reduce using rule 9 (expression -> expression ADD expression .)
+    MUL             shift and go to state 13
+    DIV             shift and go to state 14
+    EXP             shift and go to state 15
+
+  ! MUL             [ reduce using rule 9 (expression -> expression ADD expression .) ]
+  ! DIV             [ reduce using rule 9 (expression -> expression ADD expression .) ]
+  ! EXP             [ reduce using rule 9 (expression -> expression ADD expression .) ]
+  ! ADD             [ shift and go to state 11 ]
+  ! SUB             [ shift and go to state 12 ]
+  ! NE              [ shift and go to state 16 ]
+
+
+state 21
+
+    (17) expression -> ID .
+    (18) expression -> ID . LBRACKET INT RBRACKET
+
+    ADD             reduce using rule 17 (expression -> ID .)
+    SUB             reduce using rule 17 (expression -> ID .)
+    MUL             reduce using rule 17 (expression -> ID .)
+    DIV             reduce using rule 17 (expression -> ID .)
+    EXP             reduce using rule 17 (expression -> ID .)
+    NE              reduce using rule 17 (expression -> ID .)
+    ID              reduce using rule 17 (expression -> ID .)
+    LIST            reduce using rule 17 (expression -> ID .)
+    INT             reduce using rule 17 (expression -> ID .)
+    REAL            reduce using rule 17 (expression -> ID .)
+    $end            reduce using rule 17 (expression -> ID .)
+    LBRACKET        shift and go to state 18
+
+
+state 22
+
+    (10) expression -> expression SUB expression .
+    (9) expression -> expression . ADD expression
+    (10) expression -> expression . SUB expression
+    (11) expression -> expression . MUL expression
+    (12) expression -> expression . DIV expression
+    (13) expression -> expression . EXP expression
+    (14) expression -> expression . NE expression
+
+    ADD             reduce using rule 10 (expression -> expression SUB expression .)
+    SUB             reduce using rule 10 (expression -> expression SUB expression .)
+    NE              reduce using rule 10 (expression -> expression SUB expression .)
+    ID              reduce using rule 10 (expression -> expression SUB expression .)
+    LIST            reduce using rule 10 (expression -> expression SUB expression .)
+    INT             reduce using rule 10 (expression -> expression SUB expression .)
+    REAL            reduce using rule 10 (expression -> expression SUB expression .)
+    $end            reduce using rule 10 (expression -> expression SUB expression .)
+    MUL             shift and go to state 13
+    DIV             shift and go to state 14
+    EXP             shift and go to state 15
+
+  ! MUL             [ reduce using rule 10 (expression -> expression SUB expression .) ]
+  ! DIV             [ reduce using rule 10 (expression -> expression SUB expression .) ]
+  ! EXP             [ reduce using rule 10 (expression -> expression SUB expression .) ]
+  ! ADD             [ shift and go to state 11 ]
+  ! SUB             [ shift and go to state 12 ]
+  ! NE              [ shift and go to state 16 ]
+
+
+state 23
+
+    (11) expression -> expression MUL expression .
+    (9) expression -> expression . ADD expression
+    (10) expression -> expression . SUB expression
+    (11) expression -> expression . MUL expression
+    (12) expression -> expression . DIV expression
+    (13) expression -> expression . EXP expression
+    (14) expression -> expression . NE expression
+
+    ADD             reduce using rule 11 (expression -> expression MUL expression .)
+    SUB             reduce using rule 11 (expression -> expression MUL expression .)
+    MUL             reduce using rule 11 (expression -> expression MUL expression .)
+    DIV             reduce using rule 11 (expression -> expression MUL expression .)
+    NE              reduce using rule 11 (expression -> expression MUL expression .)
+    ID              reduce using rule 11 (expression -> expression MUL expression .)
+    LIST            reduce using rule 11 (expression -> expression MUL expression .)
+    INT             reduce using rule 11 (expression -> expression MUL expression .)
+    REAL            reduce using rule 11 (expression -> expression MUL expression .)
+    $end            reduce using rule 11 (expression -> expression MUL expression .)
+    EXP             shift and go to state 15
+
+  ! EXP             [ reduce using rule 11 (expression -> expression MUL expression .) ]
+  ! ADD             [ shift and go to state 11 ]
+  ! SUB             [ shift and go to state 12 ]
+  ! MUL             [ shift and go to state 13 ]
+  ! DIV             [ shift and go to state 14 ]
+  ! NE              [ shift and go to state 16 ]
+
+
+state 24
+
+    (12) expression -> expression DIV expression .
+    (9) expression -> expression . ADD expression
+    (10) expression -> expression . SUB expression
+    (11) expression -> expression . MUL expression
+    (12) expression -> expression . DIV expression
+    (13) expression -> expression . EXP expression
+    (14) expression -> expression . NE expression
+
+    ADD             reduce using rule 12 (expression -> expression DIV expression .)
+    SUB             reduce using rule 12 (expression -> expression DIV expression .)
+    MUL             reduce using rule 12 (expression -> expression DIV expression .)
+    DIV             reduce using rule 12 (expression -> expression DIV expression .)
+    NE              reduce using rule 12 (expression -> expression DIV expression .)
+    ID              reduce using rule 12 (expression -> expression DIV expression .)
+    LIST            reduce using rule 12 (expression -> expression DIV expression .)
+    INT             reduce using rule 12 (expression -> expression DIV expression .)
+    REAL            reduce using rule 12 (expression -> expression DIV expression .)
+    $end            reduce using rule 12 (expression -> expression DIV expression .)
+    EXP             shift and go to state 15
+
+  ! EXP             [ reduce using rule 12 (expression -> expression DIV expression .) ]
+  ! ADD             [ shift and go to state 11 ]
+  ! SUB             [ shift and go to state 12 ]
+  ! MUL             [ shift and go to state 13 ]
+  ! DIV             [ shift and go to state 14 ]
+  ! NE              [ shift and go to state 16 ]
+
+
+state 25
+
+    (13) expression -> expression EXP expression .
+    (9) expression -> expression . ADD expression
+    (10) expression -> expression . SUB expression
+    (11) expression -> expression . MUL expression
+    (12) expression -> expression . DIV expression
+    (13) expression -> expression . EXP expression
+    (14) expression -> expression . NE expression
+
+    ADD             reduce using rule 13 (expression -> expression EXP expression .)
+    SUB             reduce using rule 13 (expression -> expression EXP expression .)
+    MUL             reduce using rule 13 (expression -> expression EXP expression .)
+    DIV             reduce using rule 13 (expression -> expression EXP expression .)
+    NE              reduce using rule 13 (expression -> expression EXP expression .)
+    ID              reduce using rule 13 (expression -> expression EXP expression .)
+    LIST            reduce using rule 13 (expression -> expression EXP expression .)
+    INT             reduce using rule 13 (expression -> expression EXP expression .)
+    REAL            reduce using rule 13 (expression -> expression EXP expression .)
+    $end            reduce using rule 13 (expression -> expression EXP expression .)
+    EXP             shift and go to state 15
+
+  ! EXP             [ reduce using rule 13 (expression -> expression EXP expression .) ]
+  ! ADD             [ shift and go to state 11 ]
+  ! SUB             [ shift and go to state 12 ]
+  ! MUL             [ shift and go to state 13 ]
+  ! DIV             [ shift and go to state 14 ]
+  ! NE              [ shift and go to state 16 ]
+
+
+state 26
+
+    (14) expression -> expression NE expression .
+    (9) expression -> expression . ADD expression
+    (10) expression -> expression . SUB expression
+    (11) expression -> expression . MUL expression
+    (12) expression -> expression . DIV expression
+    (13) expression -> expression . EXP expression
+    (14) expression -> expression . NE expression
+
+  ! shift/reduce conflict for ADD resolved as shift
+  ! shift/reduce conflict for SUB resolved as shift
+  ! shift/reduce conflict for MUL resolved as shift
+  ! shift/reduce conflict for DIV resolved as shift
+  ! shift/reduce conflict for EXP resolved as shift
+  ! shift/reduce conflict for NE resolved as shift
+    ID              reduce using rule 14 (expression -> expression NE expression .)
+    LIST            reduce using rule 14 (expression -> expression NE expression .)
+    INT             reduce using rule 14 (expression -> expression NE expression .)
+    REAL            reduce using rule 14 (expression -> expression NE expression .)
+    $end            reduce using rule 14 (expression -> expression NE expression .)
+    ADD             shift and go to state 11
+    SUB             shift and go to state 12
+    MUL             shift and go to state 13
+    DIV             shift and go to state 14
+    EXP             shift and go to state 15
+    NE              shift and go to state 16
+
+  ! ADD             [ reduce using rule 14 (expression -> expression NE expression .) ]
+  ! SUB             [ reduce using rule 14 (expression -> expression NE expression .) ]
+  ! MUL             [ reduce using rule 14 (expression -> expression NE expression .) ]
+  ! DIV             [ reduce using rule 14 (expression -> expression NE expression .) ]
+  ! EXP             [ reduce using rule 14 (expression -> expression NE expression .) ]
+  ! NE              [ reduce using rule 14 (expression -> expression NE expression .) ]
+
+
+state 27
+
+    (7) statement_assign -> ID EQUALS expression .
+    (9) expression -> expression . ADD expression
+    (10) expression -> expression . SUB expression
+    (11) expression -> expression . MUL expression
+    (12) expression -> expression . DIV expression
+    (13) expression -> expression . EXP expression
+    (14) expression -> expression . NE expression
+
+    ID              reduce using rule 7 (statement_assign -> ID EQUALS expression .)
+    LIST            reduce using rule 7 (statement_assign -> ID EQUALS expression .)
+    INT             reduce using rule 7 (statement_assign -> ID EQUALS expression .)
+    REAL            reduce using rule 7 (statement_assign -> ID EQUALS expression .)
+    $end            reduce using rule 7 (statement_assign -> ID EQUALS expression .)
+    ADD             shift and go to state 11
+    SUB             shift and go to state 12
+    MUL             shift and go to state 13
+    DIV             shift and go to state 14
+    EXP             shift and go to state 15
+    NE              shift and go to state 16
+
+
+state 28
+
+    (18) expression -> ID LBRACKET INT . RBRACKET
+
+    RBRACKET        shift and go to state 30
+
+
+state 29
+
+    (8) statement_list_decl -> LIST ID LBRACKET . INT RBRACKET
+
+    INT             shift and go to state 31
+
+
+state 30
+
+    (18) expression -> ID LBRACKET INT RBRACKET .
+
+    ADD             reduce using rule 18 (expression -> ID LBRACKET INT RBRACKET .)
+    SUB             reduce using rule 18 (expression -> ID LBRACKET INT RBRACKET .)
+    MUL             reduce using rule 18 (expression -> ID LBRACKET INT RBRACKET .)
+    DIV             reduce using rule 18 (expression -> ID LBRACKET INT RBRACKET .)
+    EXP             reduce using rule 18 (expression -> ID LBRACKET INT RBRACKET .)
+    NE              reduce using rule 18 (expression -> ID LBRACKET INT RBRACKET .)
+    ID              reduce using rule 18 (expression -> ID LBRACKET INT RBRACKET .)
+    LIST            reduce using rule 18 (expression -> ID LBRACKET INT RBRACKET .)
+    INT             reduce using rule 18 (expression -> ID LBRACKET INT RBRACKET .)
+    REAL            reduce using rule 18 (expression -> ID LBRACKET INT RBRACKET .)
+    $end            reduce using rule 18 (expression -> ID LBRACKET INT RBRACKET .)
+
+
+state 31
+
+    (8) statement_list_decl -> LIST ID LBRACKET INT . RBRACKET
+
+    RBRACKET        shift and go to state 32
+
+
+state 32
+
+    (8) statement_list_decl -> LIST ID LBRACKET INT RBRACKET .
+
+    ID              reduce using rule 8 (statement_list_decl -> LIST ID LBRACKET INT RBRACKET .)
+    LIST            reduce using rule 8 (statement_list_decl -> LIST ID LBRACKET INT RBRACKET .)
+    INT             reduce using rule 8 (statement_list_decl -> LIST ID LBRACKET INT RBRACKET .)
+    REAL            reduce using rule 8 (statement_list_decl -> LIST ID LBRACKET INT RBRACKET .)
+    $end            reduce using rule 8 (statement_list_decl -> LIST ID LBRACKET INT RBRACKET .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for ID in state 10 resolved as shift
+WARNING: shift/reduce conflict for LIST in state 10 resolved as shift
+WARNING: shift/reduce conflict for INT in state 10 resolved as shift
+WARNING: shift/reduce conflict for REAL in state 10 resolved as shift
+WARNING: shift/reduce conflict for ADD in state 26 resolved as shift
+WARNING: shift/reduce conflict for SUB in state 26 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 26 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 26 resolved as shift
+WARNING: shift/reduce conflict for EXP in state 26 resolved as shift
+WARNING: shift/reduce conflict for NE in state 26 resolved as shift
+WARNING: reduce/reduce conflict in state 5 resolved using rule (statement -> expression)
+WARNING: rejected rule (statement_expr -> expression) in state 5
+WARNING: Rule (statement_expr -> expression) is never reduced

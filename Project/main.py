@@ -1,12 +1,15 @@
 # main.py
-from scanner import run as run_scanner
-from parser import run as run_parser
-from compiler import run as run_compiler
+from scanner import *
+from parser import *
+from compiler import *
 
 def main():
-    run_scanner()
-    run_parser()
-    run_compiler()
+    scanner = Scanner()
+    scanner.run_scanner()
+    parser = Parser()
+    parser.run_parser()
+    compiler = Compiler()
+    compiler.run_compiler()
 
 if __name__ == "__main__":
     main()

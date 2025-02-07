@@ -1,4 +1,4 @@
-# Lexical and Syntax Analyzer
+# Calculator Group Project
 
 ## Requirements
 - Python 3.x
@@ -12,7 +12,10 @@ pip install ply
 ```
 
 ## Files Structure
-- `parser.py`: The main program containing lexer and parser implementation
+- `Project/main.py`: The main program execution
+- `Project/scanner.py`: The class containing lexical analyzer implementation
+- `Project/parser.py`: The class containing syntactic and semantic analyzer implementation
+- `Project/compiler.py`: The class containing code generator implementation
 - `input.txt`: Input file containing expressions to analyze
 
 ## Running the Program
@@ -20,7 +23,7 @@ pip install ply
 1. Place your input expressions in `input.txt`, one expression per line
 2. Run the program:
 ```bash
-python Project/parser.py 
+python Project/main.py 
 ```
 
 ## Output Files
@@ -31,6 +34,7 @@ The program generates four files:
 3. `ChocolateLava.lex`: Contains the lexical grammar rules
 4. `ChocolateLava.grammar`: Contains the syntax grammar rules
 5. `ChocolateLava.csv`: Contains the symbol table information
+6. `ChocolateLava.asm`: Contains the assembly codes
 
 ## Input File Format
 - Each expression should be on a new line
@@ -40,7 +44,11 @@ The program generates four files:
 ```
 23+8
 2.5 * 0
+5NUM^ 3.0
 x=5
-x = list[2]
-x[0] + x[1]
+10*x
+x=y
+x!=5
+list x[2]
+x[1]
 ```
