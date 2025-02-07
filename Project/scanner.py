@@ -18,7 +18,7 @@ class Scanner:
         self.tokens = []
         self.token_list = {
             "list": r"list",
-            "REAL": r"([0-9]+\.[0-9]*|[0-9]+)([eE][-+]?[0-9]+)?",
+            "REAL": r"-?[0-9]*\.[0-9]+([eE][+-]?[0-9]+)?",
             "INT": r"[0-9]+",
             "VAR": r"[a-zA-Z_][a-zA-Z0-9_]*",
             "ASSIGN": r"=",
@@ -81,7 +81,7 @@ def process_file():
     with open("input.txt", "r") as f:
         lines = f.readlines()
     
-    with open("output.tok", "w") as f:
+    with open("ChocolateLava.tok", "w") as f:
         for line in lines:
             scanner = Scanner(line)
             tokens = scanner.scan()
@@ -89,13 +89,13 @@ def process_file():
             print(tokens)
             
     #grammar
-    with open("output.lex", "w") as f:
+    with open("ChocolateLava.lex", "w") as f:
         for value, regex in scanner.token_list.items():
             f.write(f"{value}: {regex}\n")
             
-if __name__ == "__main__":
+def run():
     process_file()
-    print("Tokenized output written to output.tok")
+    print("Tokenized output written to ChocolateLava.tok")
             
 
     

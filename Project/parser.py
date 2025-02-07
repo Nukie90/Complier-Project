@@ -192,53 +192,6 @@ def process_input_files():
         for lexeme, entry in symbol_table.items():
             writer.writerow(entry)
             
-def tokenize_input():
-    with open("input.txt", "r") as infile, open("ChocolateLava.tok", "w") as outfile:
-        for line_num, line in enumerate(infile, 1):
-            line = line.strip()
-            if line:
-                lexer.input(line)
-                tokens = []
-                try:
-                    for tok in lexer:
-                        tokens.append(f"{tok.value}/{tok.type}")
-                    outfile.write(" ".join(tokens) + "\n")
-                except Exception as e:
-                    outfile.write(f"{line}/ERR\n")
-                    
-def write_lexical_grammar():
-    lexical_rules = [
-        "REAL (0-9)*\\.(0-9)*",
-        "INT (0-9)*",
-        "DIV_ASSIGN /=",
-        "ASSIGN =",
-        "ADD \\+",
-        "SUB -",
-        "MUL \\*",
-        "DIV /",
-        "IDIV //",
-        "POW \\^",
-        "LT <",
-        "LE <=",
-        "GT >",
-        "GE >=",
-        "EQ ==",
-        "NE !=",
-        "LPAREN \\(",
-        "RPAREN \\)",
-        "LBRACKET \\[",
-        "RBRACKET \\]",
-        "VAR [a-zA-Z][a-zA-Z0-9_]*",
-        "LIST list",
-        "WHITESPACE [ \\t]+",
-        "NEWLINE \\n+",
-        "ERROR [^\\s\\w\\.\\+\\-\\*/=<>!()\\[\\]^]"
-    ]
-    
-    with open("ChocolateLava.lex", "w") as outfile:
-        for rule in lexical_rules:
-            outfile.write(f"{rule}\n")
-            
 def write_grammar():
     grammar_rules = [
     "<program> ::= <statement> | <expression> | <statement> <program> | <expression> <program>",
@@ -264,11 +217,6 @@ def write_grammar():
         for rule in grammar_rules:
             outfile.write(f"{rule}\n")
 
-def main():
+def run():
     process_input_files()
-    tokenize_input()
-    write_lexical_grammar()
     write_grammar()
-
-if __name__ == "__main__":
-    main()
