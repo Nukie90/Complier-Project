@@ -3,7 +3,6 @@ import ply.yacc as yacc
 import csv
 
 class Parser:
-    # Token definitions
     tokens = (
         "REAL", "INT", "VAR", "ASSIGN",
         "ADD", "SUB", "MUL", "DIV", "IDIV", "POW",
@@ -12,7 +11,6 @@ class Parser:
         "LIST", "DIV_ASSIGN", "ERROR"
     )
 
-    # Token regex patterns
     t_REAL = r"-?[0-9]*\.[0-9]+([eE][+-]?[0-9]+)?"
     t_INT = r"-?[0-9]+"
     t_DIV_ASSIGN = r"/="
@@ -35,10 +33,10 @@ class Parser:
     t_RBRACKET = r"\]"
     t_ignore = " \t"
 
-    # Precedence rules
     precedence = (
+        ('left', 'LT', 'LE', 'GT', 'GE', 'EQ', 'NE'),
         ('left', 'ADD', 'SUB'),
-        ('left', 'MUL', 'DIV'),
+        ('left', 'MUL', 'DIV', 'IDIV'),
         ('right', 'POW'),
     )
 
@@ -48,7 +46,6 @@ class Parser:
         self.lexer = lex.lex(module=self)
         self.parser = yacc.yacc(module=self)
 
-    # Lexer methods
     def t_VAR(self, t):
         r"[a-zA-Z][a-zA-Z0-9_]*"
         if t.value == "list":
@@ -66,7 +63,6 @@ class Parser:
     def t_error(self, t):
         raise Exception(f"SyntaxError at line {self.current_line}, pos {t.lexpos + 1}")
 
-    # Parser methods
     def p_program(self, p):
         """program : statement
                   | expression"""
@@ -102,6 +98,11 @@ class Parser:
                      | expression MUL expression
                      | expression DIV expression
                      | expression POW expression
+                     | expression LT expression
+                     | expression LE expression
+                     | expression GT expression
+                     | expression GE expression
+                     | expression EQ expression
                      | expression NE expression"""
         if p[2] == '^':
             p[0] = f"({p[1]}**{p[3]})"

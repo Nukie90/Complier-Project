@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftADDSUBleftMULDIVrightEXPADD DIV EQUALS EXP ID INT LBRACKET LIST MUL NE RBRACKET REAL SUB\n        statement : statement statement\n                 | statement_expr\n                 | statement_assign\n                 | statement_list_decl\n                 | expression\n        statement_expr : expressionstatement_assign : ID EQUALS expressionstatement_list_decl : LIST ID LBRACKET INT RBRACKET\n        expression : expression ADD expression\n                  | expression SUB expression\n                  | expression MUL expression\n                  | expression DIV expression\n                  | expression EXP expression\n        expression : expression NE expression\n        expression : INT\n                  | REAL\n        expression : IDexpression : ID LBRACKET INT RBRACKET'
+_lr_signature = 'leftLTLEGTGEEQUALSNEleftADDSUBleftMULDIVrightEXPADD DIV EQUALS EXP GE GT ID INT LBRACKET LE LIST LT MUL NE RBRACKET REAL SUB\n        statement : statement statement\n                 | statement_expr\n                 | statement_assign\n                 | statement_list_decl\n                 | expression\n        statement_expr : expressionstatement_assign : ID EQUALS expressionstatement_list_decl : LIST ID LBRACKET INT RBRACKET\n        expression : expression ADD expression\n                  | expression SUB expression\n                  | expression MUL expression\n                  | expression DIV expression\n                  | expression EXP expression\n                  | expression LT expression\n                  | expression LE expression\n                  | expression GT expression\n                  | expression GE expression\n                  | expression EQUALS expression\n                  | expression NE expression\n        \n        expression : INT\n                  | REAL\n        expression : IDexpression : ID LBRACKET INT RBRACKET'
     
-_lr_action_items = {'ID':([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,20,21,22,23,24,25,26,27,30,32,],[6,6,-2,-3,-4,-5,-17,19,-15,-16,6,21,21,21,21,21,21,21,-9,-17,-10,-11,-12,-13,-14,-7,-18,-8,]),'LIST':([0,1,2,3,4,5,6,8,9,10,20,21,22,23,24,25,26,27,30,32,],[7,7,-2,-3,-4,-5,-17,-15,-16,7,-9,-17,-10,-11,-12,-13,-14,-7,-18,-8,]),'INT':([0,1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,20,21,22,23,24,25,26,27,29,30,32,],[8,8,-2,-3,-4,-5,-17,-15,-16,8,8,8,8,8,8,8,8,28,-9,-17,-10,-11,-12,-13,-14,-7,31,-18,-8,]),'REAL':([0,1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,20,21,22,23,24,25,26,27,30,32,],[9,9,-2,-3,-4,-5,-17,-15,-16,9,9,9,9,9,9,9,9,-9,-17,-10,-11,-12,-13,-14,-7,-18,-8,]),'$end':([1,2,3,4,5,6,8,9,10,20,21,22,23,24,25,26,27,30,32,],[0,-2,-3,-4,-5,-17,-15,-16,-1,-9,-17,-10,-11,-12,-13,-14,-7,-18,-8,]),'ADD':([5,6,8,9,20,21,22,23,24,25,26,27,30,],[11,-17,-15,-16,-9,-17,-10,-11,-12,-13,11,11,-18,]),'SUB':([5,6,8,9,20,21,22,23,24,25,26,27,30,],[12,-17,-15,-16,-9,-17,-10,-11,-12,-13,12,12,-18,]),'MUL':([5,6,8,9,20,21,22,23,24,25,26,27,30,],[13,-17,-15,-16,13,-17,13,-11,-12,-13,13,13,-18,]),'DIV':([5,6,8,9,20,21,22,23,24,25,26,27,30,],[14,-17,-15,-16,14,-17,14,-11,-12,-13,14,14,-18,]),'EXP':([5,6,8,9,20,21,22,23,24,25,26,27,30,],[15,-17,-15,-16,15,-17,15,15,15,15,15,15,-18,]),'NE':([5,6,8,9,20,21,22,23,24,25,26,27,30,],[16,-17,-15,-16,-9,-17,-10,-11,-12,-13,16,16,-18,]),'EQUALS':([6,],[17,]),'LBRACKET':([6,19,21,],[18,29,18,]),'RBRACKET':([28,31,],[30,32,]),}
+_lr_action_items = {'ID':([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,25,26,27,28,29,30,31,32,33,34,35,36,37,40,42,],[6,6,-2,-3,-4,-5,-22,24,-20,-21,6,26,26,26,26,26,26,26,26,26,26,26,26,-9,-22,-10,-11,-12,-13,-14,-15,-16,-17,-18,-19,-7,-23,-8,]),'LIST':([0,1,2,3,4,5,6,8,9,10,25,26,27,28,29,30,31,32,33,34,35,36,37,40,42,],[7,7,-2,-3,-4,-5,-22,-20,-21,7,-9,-22,-10,-11,-12,-13,-14,-15,-16,-17,-18,-19,-7,-23,-8,]),'INT':([0,1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,25,26,27,28,29,30,31,32,33,34,35,36,37,39,40,42,],[8,8,-2,-3,-4,-5,-22,-20,-21,8,8,8,8,8,8,8,8,8,8,8,8,8,38,-9,-22,-10,-11,-12,-13,-14,-15,-16,-17,-18,-19,-7,41,-23,-8,]),'REAL':([0,1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,25,26,27,28,29,30,31,32,33,34,35,36,37,40,42,],[9,9,-2,-3,-4,-5,-22,-20,-21,9,9,9,9,9,9,9,9,9,9,9,9,9,-9,-22,-10,-11,-12,-13,-14,-15,-16,-17,-18,-19,-7,-23,-8,]),'$end':([1,2,3,4,5,6,8,9,10,25,26,27,28,29,30,31,32,33,34,35,36,37,40,42,],[0,-2,-3,-4,-5,-22,-20,-21,-1,-9,-22,-10,-11,-12,-13,-14,-15,-16,-17,-18,-19,-7,-23,-8,]),'ADD':([5,6,8,9,25,26,27,28,29,30,31,32,33,34,35,36,37,40,],[11,-22,-20,-21,-9,-22,-10,-11,-12,-13,11,11,11,11,11,11,11,-23,]),'SUB':([5,6,8,9,25,26,27,28,29,30,31,32,33,34,35,36,37,40,],[12,-22,-20,-21,-9,-22,-10,-11,-12,-13,12,12,12,12,12,12,12,-23,]),'MUL':([5,6,8,9,25,26,27,28,29,30,31,32,33,34,35,36,37,40,],[13,-22,-20,-21,13,-22,13,-11,-12,-13,13,13,13,13,13,13,13,-23,]),'DIV':([5,6,8,9,25,26,27,28,29,30,31,32,33,34,35,36,37,40,],[14,-22,-20,-21,14,-22,14,-11,-12,-13,14,14,14,14,14,14,14,-23,]),'EXP':([5,6,8,9,25,26,27,28,29,30,31,32,33,34,35,36,37,40,],[15,-22,-20,-21,15,-22,15,15,15,15,15,15,15,15,15,15,15,-23,]),'LT':([5,6,8,9,25,26,27,28,29,30,31,32,33,34,35,36,37,40,],[16,-22,-20,-21,-9,-22,-10,-11,-12,-13,-14,-15,-16,-17,-18,-19,16,-23,]),'LE':([5,6,8,9,25,26,27,28,29,30,31,32,33,34,35,36,37,40,],[17,-22,-20,-21,-9,-22,-10,-11,-12,-13,-14,-15,-16,-17,-18,-19,17,-23,]),'GT':([5,6,8,9,25,26,27,28,29,30,31,32,33,34,35,36,37,40,],[18,-22,-20,-21,-9,-22,-10,-11,-12,-13,-14,-15,-16,-17,-18,-19,18,-23,]),'GE':([5,6,8,9,25,26,27,28,29,30,31,32,33,34,35,36,37,40,],[19,-22,-20,-21,-9,-22,-10,-11,-12,-13,-14,-15,-16,-17,-18,-19,19,-23,]),'EQUALS':([5,6,8,9,25,26,27,28,29,30,31,32,33,34,35,36,37,40,],[20,22,-20,-21,-9,-22,-10,-11,-12,-13,-14,-15,-16,-17,-18,-19,20,-23,]),'NE':([5,6,8,9,25,26,27,28,29,30,31,32,33,34,35,36,37,40,],[21,-22,-20,-21,-9,-22,-10,-11,-12,-13,-14,-15,-16,-17,-18,-19,21,-23,]),'LBRACKET':([6,24,26,],[23,39,23,]),'RBRACKET':([38,41,],[40,42,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'statement':([0,1,10,],[1,10,10,]),'statement_expr':([0,1,10,],[2,2,2,]),'statement_assign':([0,1,10,],[3,3,3,]),'statement_list_decl':([0,1,10,],[4,4,4,]),'expression':([0,1,10,11,12,13,14,15,16,17,],[5,5,5,20,22,23,24,25,26,27,]),}
+_lr_goto_items = {'statement':([0,1,10,],[1,10,10,]),'statement_expr':([0,1,10,],[2,2,2,]),'statement_assign':([0,1,10,],[3,3,3,]),'statement_list_decl':([0,1,10,],[4,4,4,]),'expression':([0,1,10,11,12,13,14,15,16,17,18,19,20,21,22,],[5,5,5,25,27,28,29,30,31,32,33,34,35,36,37,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,22 +27,27 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> statement","S'",1,None,None,None),
-  ('statement -> statement statement','statement',2,'p_statement','compiler.py',70),
-  ('statement -> statement_expr','statement',1,'p_statement','compiler.py',71),
-  ('statement -> statement_assign','statement',1,'p_statement','compiler.py',72),
-  ('statement -> statement_list_decl','statement',1,'p_statement','compiler.py',73),
-  ('statement -> expression','statement',1,'p_statement','compiler.py',74),
-  ('statement_expr -> expression','statement_expr',1,'p_statement_expr','compiler.py',82),
-  ('statement_assign -> ID EQUALS expression','statement_assign',3,'p_statement_assign','compiler.py',89),
-  ('statement_list_decl -> LIST ID LBRACKET INT RBRACKET','statement_list_decl',5,'p_statement_list_decl','compiler.py',109),
-  ('expression -> expression ADD expression','expression',3,'p_expression_binop','compiler.py',157),
-  ('expression -> expression SUB expression','expression',3,'p_expression_binop','compiler.py',158),
-  ('expression -> expression MUL expression','expression',3,'p_expression_binop','compiler.py',159),
-  ('expression -> expression DIV expression','expression',3,'p_expression_binop','compiler.py',160),
-  ('expression -> expression EXP expression','expression',3,'p_expression_binop','compiler.py',161),
-  ('expression -> expression NE expression','expression',3,'p_expression_ne','compiler.py',221),
-  ('expression -> INT','expression',1,'p_expression_number','compiler.py',246),
-  ('expression -> REAL','expression',1,'p_expression_number','compiler.py',247),
-  ('expression -> ID','expression',1,'p_expression_id','compiler.py',252),
-  ('expression -> ID LBRACKET INT RBRACKET','expression',4,'p_expression_list_access','compiler.py',256),
+  ('statement -> statement statement','statement',2,'p_statement','compiler.py',67),
+  ('statement -> statement_expr','statement',1,'p_statement','compiler.py',68),
+  ('statement -> statement_assign','statement',1,'p_statement','compiler.py',69),
+  ('statement -> statement_list_decl','statement',1,'p_statement','compiler.py',70),
+  ('statement -> expression','statement',1,'p_statement','compiler.py',71),
+  ('statement_expr -> expression','statement_expr',1,'p_statement_expr','compiler.py',79),
+  ('statement_assign -> ID EQUALS expression','statement_assign',3,'p_statement_assign','compiler.py',83),
+  ('statement_list_decl -> LIST ID LBRACKET INT RBRACKET','statement_list_decl',5,'p_statement_list_decl','compiler.py',103),
+  ('expression -> expression ADD expression','expression',3,'p_expression_binop','compiler.py',125),
+  ('expression -> expression SUB expression','expression',3,'p_expression_binop','compiler.py',126),
+  ('expression -> expression MUL expression','expression',3,'p_expression_binop','compiler.py',127),
+  ('expression -> expression DIV expression','expression',3,'p_expression_binop','compiler.py',128),
+  ('expression -> expression EXP expression','expression',3,'p_expression_binop','compiler.py',129),
+  ('expression -> expression LT expression','expression',3,'p_expression_binop','compiler.py',130),
+  ('expression -> expression LE expression','expression',3,'p_expression_binop','compiler.py',131),
+  ('expression -> expression GT expression','expression',3,'p_expression_binop','compiler.py',132),
+  ('expression -> expression GE expression','expression',3,'p_expression_binop','compiler.py',133),
+  ('expression -> expression EQUALS expression','expression',3,'p_expression_binop','compiler.py',134),
+  ('expression -> expression NE expression','expression',3,'p_expression_binop','compiler.py',135),
+  ('expression -> INT','expression',1,'p_expression_number','compiler.py',184),
+  ('expression -> REAL','expression',1,'p_expression_number','compiler.py',185),
+  ('expression -> ID','expression',1,'p_expression_id','compiler.py',190),
+  ('expression -> ID LBRACKET INT RBRACKET','expression',4,'p_expression_list_access','compiler.py',194),
 ]

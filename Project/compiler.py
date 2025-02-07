@@ -3,15 +3,17 @@ import ply.yacc as yacc
 
 class Compiler:
     def __init__(self):
-        # Define tokens
         self.tokens = (
             "REAL", "INT", "ID", "LIST",
             "ADD", "SUB", "MUL", "DIV", "EXP",
-            "EQUALS", "NE",
+            "EQUALS", "NE", "LT", "LE", "GT", "GE",
             "LBRACKET", "RBRACKET"
         )
         
-        # Token regex patterns
+        self.t_LT = r"<"
+        self.t_LE = r"<="
+        self.t_GT = r">"
+        self.t_GE = r">="
         self.t_LIST = r"list"
         self.t_ADD = r"\+"
         self.t_SUB = r"-"
@@ -24,21 +26,17 @@ class Compiler:
         self.t_EXP = r"\^"
         self.t_ignore = " \t"
 
-        # Set up precedence rules
         self.precedence = (
+            ('left', 'LT', 'LE', 'GT', 'GE', 'EQUALS', 'NE'),
             ('left', 'ADD', 'SUB'),
             ('left', 'MUL', 'DIV'),
             ('right', 'EXP'),
         )
 
-        # Initialize symbol table
         self.symbol_table = {}
-
-        # Build lexer and parser
         self.lexer = lex.lex(module=self)
         self.parser = yacc.yacc(module=self)
 
-    # Lexer methods
     def t_REAL(self, t):
         r"\d+\.\d+"
         t.value = float(t.value)
@@ -64,7 +62,6 @@ class Compiler:
         t.lexer.skip(1)
         raise SyntaxError(f"Lexical ERROR: Unexpected character '{t.value[0]}' at line {t.lineno}")
 
-    # Parser methods
     def p_statement(self, p):
         """
         statement : statement statement
@@ -81,9 +78,6 @@ class Compiler:
     def p_statement_expr(self, p):
         """statement_expr : expression"""
         p[0] = p[1]
-
-    def is_id(self, p):
-        return isinstance(p, str) and p in self.symbol_table
 
     def p_statement_assign(self, p):
         """statement_assign : ID EQUALS expression"""
@@ -126,32 +120,6 @@ class Compiler:
 
         p[0] = self._generate_list_initialization(list_name, list_size)
 
-    def _generate_list_initialization(self, list_name, list_size):
-        """Helper method to generate list initialization assembly code"""
-        asm_code = []
-        # First iteration
-        asm_code.extend([
-            f"LD R0 #0",
-            f"LD R1 @{list_name}",
-            f"LD R2 #0",
-            f"LD R3 #4",
-            f"MUL.i R4 R2 R3",
-            f"ADD.i R5 R1 R4",
-            f"ST @R5 R0"
-        ])
-
-        # Subsequent iterations
-        for i in range(1, list_size):
-            asm_code.extend([
-                f"LD R2 #{i}",
-                f"LD R3 #4",
-                f"MUL.i R4 R2 R3",
-                f"ADD.i R5 R1 R4",
-                f"ST @R5 R0"
-            ])
-
-        return "\n".join(asm_code)
-
     def p_expression_binop(self, p):
         """
         expression : expression ADD expression
@@ -159,87 +127,57 @@ class Compiler:
                   | expression MUL expression
                   | expression DIV expression
                   | expression EXP expression
+                  | expression LT expression
+                  | expression LE expression
+                  | expression GT expression
+                  | expression GE expression
+                  | expression EQUALS expression
+                  | expression NE expression
         """
-        op_map = {"+": "ADD.i", "-": "SUB.i", "*": "MUL.i", "/": "DIV.i", "^": "EXP.i"}
-        float_ops = {"*": "MUL.f", "/": "DIV.f", "+": "ADD.f", "-": "SUB.f", "^": "EXP.f"}
+        op_map = {
+            "+": "ADD.i", "-": "SUB.i", "*": "MUL.i", "/": "DIV.i", "^": "EXP.i",
+            "<": "LT.f", "<=": "LE.f", ">": "GT.f", ">=": "GE.f", "=": "EQ.f", "!=": "NE.f"
+        }
+        float_ops = {
+            "*": "MUL.f", "/": "DIV.f", "+": "ADD.f", "-": "SUB.f", "^": "EXP.f",
+            "<": "LT.f", "<=": "LE.f", ">": "GT.f", ">=": "GE.f", "=": "EQ.f", "!=": "NE.f"
+        }
 
         p[0] = self._generate_binop_code(p[1], p[2], p[3], op_map, float_ops)
 
     def _generate_binop_code(self, left, op, right, op_map, float_ops):
-        """Helper method to generate binary operation assembly code"""
         code = []
-
-        # Load operands and determine types
         left_type, left_code = self._load_operand(left, "R0")
         right_type, right_code = self._load_operand(right, "R1")
-
+        
         code.extend([left_code, right_code])
-
-        if op == "^":
-            code.extend(self._handle_exponentiation(left_type, right_type))
-        else:
-            code.extend(self._handle_arithmetic(op, left_type, right_type, op_map, float_ops))
-
-        return "\n".join(filter(None, code))
-
-    def _load_operand(self, operand, register):
-        """Helper method to load operands and determine their types"""
-        if isinstance(operand, (int, float)):
-            return type(operand), f"LD {register} #{operand}"
-        elif isinstance(operand, str) and operand in self.symbol_table:
-            return (type(self.symbol_table[operand][0]), 
-                   f"LD {register} @{operand}")
-        return None, ""
-
-    def _handle_exponentiation(self, left_type, right_type):
-        """Helper method to handle exponentiation operations"""
-        code = []
-        if left_type is float or right_type is float:
-            if left_type is int:
-                code.append("FL.i R0 R0")
-            if right_type is int:
-                code.append("FL.i R1 R1")
-            code.append("EXP.f R2 R0 R1\nST @print R2")
-        else:
-            code.append("EXP.i R2 R0 R1\nST @print R2")
-        return code
-
-    def _handle_arithmetic(self, op, left_type, right_type, op_map, float_ops):
-        """Helper method to handle arithmetic operations"""
-        code = []
-        if left_type is float or right_type is float:
+        
+        # For comparison operators, always convert to float
+        if op in ["<", "<=", ">", ">=", "=", "!="]:
             if left_type is int:
                 code.append("FL.i R0 R0")
             if right_type is int:
                 code.append("FL.i R1 R1")
             code.append(f"{float_ops[op]} R2 R0 R1\nST @print R2")
         else:
-            code.append(f"{op_map[op]} R2 R0 R1\nST @print R2")
-        return code
-
-    def p_expression_ne(self, p):
-        """expression : expression NE expression"""
-        p[0] = self._generate_ne_comparison(p[1], p[3])
-
-    def _generate_ne_comparison(self, left, right):
-        """Helper method to generate not-equal comparison assembly code"""
-        code = []
-        
-        # Load operands and determine types
-        right_type, right_code = self._load_operand(right, "R0")
-        left_type, left_code = self._load_operand(left, "R1")
-        
-        code.extend([right_code, left_code])
-        
-        # Convert to float if necessary
-        if right_type is int:
-            code.append("FL.i R0 R0")
-        if left_type is int:
-            code.append("FL.i R1 R1")
-            
-        code.append("NE.f R2 R0 R1\nST @print R2")
+            if left_type is float or right_type is float:
+                if left_type is int:
+                    code.append("FL.i R0 R0")
+                if right_type is int:
+                    code.append("FL.i R1 R1")
+                code.append(f"{float_ops[op]} R2 R0 R1\nST @print R2")
+            else:
+                code.append(f"{op_map[op]} R2 R0 R1\nST @print R2")
         
         return "\n".join(filter(None, code))
+
+    def _load_operand(self, operand, register):
+        if isinstance(operand, (int, float)):
+            return type(operand), f"LD {register} #{operand}"
+        elif isinstance(operand, str) and operand in self.symbol_table:
+            return (type(self.symbol_table[operand][0]), 
+                   f"LD {register} @{operand}")
+        return None, ""
 
     def p_expression_number(self, p):
         """
@@ -256,11 +194,9 @@ class Compiler:
         """expression : ID LBRACKET INT RBRACKET"""
         list_name = p[1]
         index = int(p[3])
-
         p[0] = self._generate_list_access(list_name, index)
 
     def _generate_list_access(self, list_name, index):
-        """Helper method to generate list access assembly code"""
         if list_name not in self.symbol_table or self.symbol_table[list_name]['type'] != 'list':
             print(f"ERROR: '{list_name}' is not a declared list.")
             return "ERROR"
@@ -283,7 +219,6 @@ class Compiler:
         print("ERROR")
 
     def process_input(self, input_text):
-        """Process a single line of input"""
         try:
             result = self.parser.parse(input_text)
             return str(result) if result else "ERROR"
@@ -293,7 +228,6 @@ class Compiler:
             return "ERROR"
 
     def run_compiler(self):
-        """Compile input file to assembly"""
         with open("input.txt", "r") as infile, open("ChocolateLava.asm", "w") as outfile:
             for line in infile:
                 line = line.strip()
